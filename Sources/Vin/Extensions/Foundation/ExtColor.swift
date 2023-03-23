@@ -17,7 +17,7 @@ extension Color {
     /// This property generates a random color by creating a Color object with randomly-generated values for its red, green, and blue components. The random(in:) method of the Double type is used to generate random values between 0 and 255 for each component, which are then divided by 255 to convert them to the appropriate range for the Color initializer.
 
     /// The resulting Color object is then returned as the result of this property.
-    static var random: Color {
+    static public var random: Color {
         Color(red: .random(in: 0 ... 255) / 255, green: .random(in: 0 ... 255) / 255, blue: .random(in: 0 ... 255) / 255)
     }
     
@@ -25,7 +25,7 @@ extension Color {
     ///
     /// - Parameter hex: The hexadecimal color string to convert.
     /// - Returns: A UIColor object representing the specified color.
-    static func hexStringToUIColor(hex: String) -> UIColor {
+    static public func hexStringToUIColor(hex: String) -> UIColor {
         var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
 
         if cString.hasPrefix("#") {
@@ -49,7 +49,7 @@ extension Color {
     ///
     /// - Parameter hex: The hexadecimal color string to convert.
     /// - Returns: A Color object representing the specified color.
-    static func hexStringToColor(hex: String) -> Color {
+    static public func hexStringToColor(hex: String) -> Color {
         Color(hexStringToUIColor(hex: hex))
     }
 }

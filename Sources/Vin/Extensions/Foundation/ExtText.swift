@@ -50,7 +50,7 @@ extension Text {
     /// This extension adds a method to the Text type that modifies the view to include an additional view separated from the original text by a spacer. The original text is included in the view with the self parameter.
 
     /// The otherView parameter is used to create a new View that displays the additional content. The two views and a spacer are then combined into an HStack view and returned as the result of this method.
-    func spacedOut<Content: View>(@ViewBuilder otherView: () -> Content) -> some View {
+    public func spacedOut<Content: View>(@ViewBuilder otherView: () -> Content) -> some View {
         HStack {
             self
             Spacer()
@@ -67,7 +67,7 @@ extension Text {
     /// This extension adds a method to the Text type that modifies the view to include additional text separated from the original text by a spacer. The original text is included in the view with the self parameter.
 
     /// The text parameter is used to create a new Text view that displays the additional text. The two Text views and a spacer are then combined into an HStack view and returned as the result of this method.
-    func spacedOut(text: String) -> some View {
+    public func spacedOut(text: String) -> some View {
         HStack {
             self
             Spacer()

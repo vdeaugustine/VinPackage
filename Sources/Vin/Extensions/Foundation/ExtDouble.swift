@@ -11,7 +11,7 @@ extension Double {
     /// Provides a convenient method for rounding a Double value to a specified number of decimal places.
     /// - Parameter places: The number of decimal places to round to.
     /// - Returns: The rounded Double value.
-    func roundTo(places: Int) -> Double {
+    public func roundTo(places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
     }
@@ -21,7 +21,7 @@ extension Double {
     /// - places: The number of decimal places to round to. Defaults to 1.
     /// - removeFrontZero: A Boolean value indicating whether to remove leading zeros before the decimal point. Defaults to false.
     /// - Returns: A string representation of the rounded Double value, with optional formatting applied.
-    func simpleStr(_ places: Int = 1, _ removeFrontZero: Bool = false) -> String {
+    public func simpleStr(_ places: Int = 1, _ removeFrontZero: Bool = false) -> String {
         let rounded = roundTo(places: places)
         if rounded.truncatingRemainder(dividingBy: 1) == 0 {
             return String(Int(rounded))
@@ -38,7 +38,7 @@ extension Double {
         }
     }
 
-    /// A utility function that formats a numeric value as a currency string with an optional inclusion of cents.
+    /// A utility public function that formats a numeric value as a currency string with an optional inclusion of cents.
     ///
     /// - Parameter includeCents: A boolean value indicating whether or not to include cents in the formatted string. Default value is true.
     ///
@@ -51,7 +51,7 @@ extension Double {
     /// The formatted string is then cleaned up and returned by the cleanDollarAmount function, which removes any leading or trailing dollar signs and formats any .00 cents amounts as whole dollar amounts. The cleaned string is then returned as the result of this function.
 
     /// If the numeric value cannot be formatted using the NumberFormatter class, this function returns the original value as a string.
-    func formattedForMoney(includeCents: Bool = true) -> String {
+    public func formattedForMoney(includeCents: Bool = true) -> String {
         func cleanDollarAmount(amount: String) -> String {
             let dollarAmount = amount.trimmingCharacters(in: ["$"])
             if dollarAmount.isEmpty {
@@ -88,7 +88,7 @@ extension Double {
     /// If amount is empty, this function returns an empty string. Otherwise, it formats the value with up to 11 decimal places and rounds the value to the nearest cent. If the resulting value ends with ".00", this function removes the decimal point and trailing zeroes.
 
     /// The resulting string is then returned as the result of this function.
-    func formattedForMoneyExtended(decimalPlaces: Int = 4) -> String {
+    public func formattedForMoneyExtended(decimalPlaces: Int = 4) -> String {
         guard let currencySymbol = Locale.current.currencySymbol,
               let unicodeScalar = Unicode.Scalar(currencySymbol.unicodeScalars.first?.value ?? 36) else { return "" }
         func cleanDollarAmount(amount: String, decimals: Int) -> String {
@@ -149,7 +149,7 @@ extension Double {
     /// This function calls the secondsFormatted(_:allowedUnits:) class method of the Date class to format the numeric value as a string representing a time interval in hours and minutes. The allowedUnits parameter specifies the units to use for formatting the time interval. The default value is [.hour, .minute], which formats the time interval in hours and minutes only.
 
     /// The resulting string is then returned as the result of this function.
-    func formatForTime(_ allowedUnits: NSCalendar.Unit = [.hour, .minute]) -> String {
+    public func formatForTime(_ allowedUnits: NSCalendar.Unit = [.hour, .minute]) -> String {
         Date.secondsFormatted(self, allowedUnits: allowedUnits)
     }
 
@@ -162,7 +162,7 @@ extension Double {
     /// If the formatted string starts with "0.", this function returns the string with the leading "0" removed. Otherwise, it returns the formatted string with three decimal places.
 
     /// The resulting string is then returned as the result of this function.
-    func formatForBaseball() -> String {
+    public func formatForBaseball() -> String {
         let formattedValue = String(format: "%.3f", roundTo(places: 3))
         if formattedValue.hasPrefix("0.") {
             return String(formattedValue.dropFirst(1))
@@ -179,7 +179,7 @@ extension Double {
     /// If the rounded values are equal, this property returns the string representation of the original numeric value with a trailing zero added. Otherwise, it returns the string representation of the original numeric value without a trailing zero.
 
     /// The resulting string is then returned as the result of this property.
-    var str: String {
+    public var str: String {
         let roundTens = roundTo(places: 1)
         let roundHundreds = roundTo(places: 2)
         if roundTens == roundHundreds {
@@ -199,7 +199,7 @@ extension Double {
     /// If includeSecondZero is true and the rounded values are equal, this function returns the string representation of the original numeric value with a trailing zero added. Otherwise, it returns the string representation of the original numeric value without a trailing zero.
 
     /// The resulting string is then returned as the result of this function.
-    func str(includeSecondZero: Bool = false) -> String {
+    public func str(includeSecondZero: Bool = false) -> String {
         let roundTens = roundTo(places: 1)
         let roundHundreds = roundTo(places: 2)
         if roundTens == roundHundreds,
@@ -220,7 +220,7 @@ extension Double {
     /// Otherwise, this property returns .positional.
 
     /// The resulting DateComponentsFormatter.UnitsStyle value is then returned as the result of this property.
-    var unitsStyle: DateComponentsFormatter.UnitsStyle {
+    public var unitsStyle: DateComponentsFormatter.UnitsStyle {
         if self < 60 {
             return .abbreviated
         }

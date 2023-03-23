@@ -19,7 +19,7 @@ extension Array where Element == Double {
     /// Finally, it calculates the standard deviation by taking the square root of the variance.
 
     /// The resulting Double value represents the standard deviation of the array.
-    func standardDeviation() -> Double {
+    public func standardDeviation() -> Double {
         let count = Double(self.count)
         let average = reduce(0, +) / count
         let variance = map { pow($0 - average, 2) }.reduce(0, +) / count
@@ -32,14 +32,14 @@ extension Array {
     /// Returns a Boolean value indicating whether the provided index is within the bounds of the Array.
     /// - Parameter num: The index to check.
     /// - Returns: true if the index is within the bounds of the Array, otherwise false.
-    func safeCheck(_ num: Int) -> Bool {
+    public func safeCheck(_ num: Int) -> Bool {
         return num >= 0 && num < count
     }
 
     /// Returns the element at a specified index within the Array, or nil if the index is out of bounds.
     /// - Parameter num: The index of the element to retrieve.
     /// - Returns: The element at the specified index, if it exists within the Array, otherwise nil.
-    func safeGet(at num: Int) -> Element? {
+    public func safeGet(at num: Int) -> Element? {
         guard safeCheck(num) else { return nil }
         return self[num]
     }
@@ -53,7 +53,7 @@ extension Array {
     /// This extension adds a method to the Array type that returns a subarray containing the first num elements of the original array. The method first uses the prefix(_:) method to create a subsequence of the first num elements, and then converts the subsequence to an array using the Array(_:) initializer.
 
     /// The resulting array contains the first num elements of the original array. If the original array has fewer than num elements, the resulting array will have fewer elements than num.
-    func prefixArray(_ num: Int) -> [Element] {
+    public func prefixArray(_ num: Int) -> [Element] {
         Array(prefix(num))
     }
 
@@ -66,7 +66,7 @@ extension Array {
     /// This extension adds a method to the Array type that returns a subarray containing the last num elements of the original array. The method first uses the suffix(_:) method to create a subsequence of the last num elements, and then converts the subsequence to an array using the Array(_:) initializer.
 
     /// The resulting array contains the last num elements of the original array. If the original array has fewer than num elements, the resulting array will have fewer elements than num.
-    func suffixArray(_ num: Int) -> [Element] {
+    public func suffixArray(_ num: Int) -> [Element] {
         Array(suffix(num))
     }
 
@@ -81,7 +81,7 @@ extension Array {
     /// If an element in the array is a Double or Int, it is first converted to a String using the str or str() computed property, respectively. Otherwise, the element is converted to a String using the default String initializer.
 
     /// The resulting String is then returned, with each element separated by the specified separator.
-    func joinString(_ separator: String) -> String {
+    public func joinString(_ separator: String) -> String {
         var arr: [String] = []
         for item in self {
             if let dub = item as? Double {
@@ -108,7 +108,7 @@ extension Array where Element: Equatable {
     /// The method loops through each element in the first array and checks if it is also in the other array using the contains method. If an element is found in both arrays and is not already in the result array, it is appended to the result array.
 
     /// The resulting array contains the intersection of the two arrays, with each element appearing only once.
-    func intersection(_ other: [Element]) -> [Element] {
+    public func intersection(_ other: [Element]) -> [Element] {
         var result = [Element]()
         for item in self {
             if other.contains(item) && !result.contains(item) {
@@ -132,7 +132,7 @@ extension Sequence where Iterator.Element: Hashable {
     /// First, the method creates a Set from the other sequence to allow for fast lookups. Then, it uses the contains(where:) method to check if any of the elements in the sequence are also in the other sequence.
 
     /// The resulting Bool value indicates whether the sequence intersects with the other sequence.
-    func intersects<S: Sequence>(with sequence: S) -> Bool
+    public func intersects<S: Sequence>(with sequence: S) -> Bool
         where S.Iterator.Element == Iterator.Element {
         let sequenceSet = Set(sequence)
         return contains(where: sequenceSet.contains)

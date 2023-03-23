@@ -24,7 +24,7 @@ struct CustomFontModifier: ViewModifier {
     ///
     /// - Parameter content: The view to modify.
     /// - Returns: The modified view.
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .font(.system(size: size))
             .foregroundColor(.hexStringToColor(hex: color))

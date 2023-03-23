@@ -17,7 +17,7 @@ extension Int {
     /// The suffixes added are "st" for numbers ending in 1 (except for numbers ending in 11), "nd" for numbers ending in 2 (except for numbers ending in 12), "rd" for numbers ending in 3 (except for numbers ending in 13), and "th" for all other numbers.
 
     /// The resulting string is then returned as the result of this computed property.
-    var withSuffix: String {
+    public var withSuffix: String {
         func addSuffixToNumber(_ number: Int) -> String {
             let suffix: String
             switch number % 10 {
@@ -60,7 +60,7 @@ extension Int {
     /// This function first creates a Double value from the original integer value self. It then calls the formattedForMoney() method of the Double type to format the value as a currency string.
 
     /// The resulting string is then returned as the result of this function.
-    func formatForMoney() -> String {
+    public func formatForMoney() -> String {
         let dub = Double(self)
         return dub.formattedForMoney()
     }
@@ -72,7 +72,7 @@ extension Int {
     /// This property simply returns the string representation of the original numeric value self.
 
     /// The resulting string is then returned as the result of this property.
-    var str: String {
+    public var str: String {
         "\(self)"
     }
 }

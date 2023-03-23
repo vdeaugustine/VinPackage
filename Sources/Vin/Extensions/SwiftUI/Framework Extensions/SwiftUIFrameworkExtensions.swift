@@ -12,11 +12,11 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 extension GridItem {
-    static func flexibleItems(_ amount: Int) -> [GridItem] {
+    static public func flexibleItems(_ amount: Int) -> [GridItem] {
         (0 ..< amount).map { _ in GridItem(.flexible()) }
     }
 
-    static func fixedItems(_ amount: Int, size: CGFloat) -> [GridItem] {
+    static public func fixedItems(_ amount: Int, size: CGFloat) -> [GridItem] {
         (0 ..< amount).map { _ in GridItem(.fixed(size)) }
     }
 }
