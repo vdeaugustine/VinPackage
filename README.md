@@ -51,23 +51,23 @@ VinPackage provides extensions and utilities in various categories, including:
 - `random`: returns a random color
 - `getLighterColorForGradient(_ increaseAmount: CGFloat? = nil) -> Color:` returns a lighter color, useful for creating gradients
 ### Date
-`secondsFormatted:` formats a given number of seconds into a string representation that includes hours, minutes, and/or seconds
+- `secondsFormatted:` formats a given number of seconds into a string representation that includes hours, minutes, and/or seconds
 ### Double
-`formattedForMoney`: formats a double as a monetary value
-`formattedForMoneyExtended(decimalPlaces: Int = 4) -> String:` formats a double as a monetary value with an extended decimal format
-`str`: returns a string representation of the double
-`roundTo(places: Int) -> Double`: rounds the double to the specified number of decimal places
+- `formattedForMoney`: formats a double as a monetary value
+- `formattedForMoneyExtended(decimalPlaces: Int = 4) -> String:` formats a double as a monetary value with an extended decimal format
+- `str`: returns a string representation of the double
+- `roundTo(places: Int) -> Double`: rounds the double to the specified number of decimal places
 ### Array
-`intersection(_ other: [Element]) -> [Element]`: returns an array containing the elements that are common to both the array and the given array
+- `intersection(_ other: [Element]) -> [Element]`: returns an array containing the elements that are common to both the array and the given array
 ### Int
-`withSuffix: String`: returns the integer with an appropriate English suffix (e.g. "1st", "2nd", "3rd", "4th")
+- `withSuffix: String`: returns the integer with an appropriate English suffix (e.g. "1st", "2nd", "3rd", "4th")
 ### String
-`getDoubleFromMoney() -> Double?`: extracts a double value from a string representing a monetary value
-`makeMoney(makeCents: Bool) -> String`: formats a string as a monetary value with or without cents
-`prefixArray(_ num: Int) -> [Element]:` returns the first num elements of the array
-`suffixArray(_ num: Int) -> [Element]:` returns the last num elements of the array
-`removingWhiteSpaces() -> String`: removes all white space characters from the string
-`join(with otherStrings: [String], _ separator: String = " ") -> String`: joins the string with one or more other strings using the specified separator
+- `getDoubleFromMoney() -> Double?`: extracts a double value from a string representing a monetary value
+- `makeMoney(makeCents: Bool) -> String`: formats a string as a monetary value with or without cents
+- `prefixArray(_ num: Int) -> [Element]:` returns the first num elements of the array
+- `suffixArray(_ num: Int) -> [Element]:` returns the last num elements of the array
+- `removingWhiteSpaces() -> String`: removes all white space characters from the string
+- `join(with otherStrings: [String], _ separator: String = " ") -> String`: joins the string with one or more other strings using the specified separator
 
 ## Contributing
 Contributions to VinPackage are welcome! If you find a bug, have an idea for a new feature, or just want to improve the code or documentation, feel free to open a pull request.
