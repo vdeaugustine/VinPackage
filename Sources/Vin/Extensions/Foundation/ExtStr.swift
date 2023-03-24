@@ -101,4 +101,22 @@ extension String {
         arr.insert(self, at: 0)
         return arr.joined(separator: separator)
     }
+    
+    /// Appends a string to a string only if it does not already contain it.
+    ///
+    /// - Parameters:
+    /// - string: The string to be appended, if not already contained.
+    /// - separator: The separator to be used between existing string and the appended string. Defaults to ",".
+    ///
+    /// Modifies the string instance that this function is called on. If the provided string is nil or the receiver already contains the provided string, no changes will be made. If the receiver is empty, the provided string will be appended without the separator. Otherwise, the provided separator will be used to join the current value and the new string.
+    public mutating func appendIfNotContains(_ string: String?, separator: String = ",") {
+        guard let string = string else { return }
+        if !self.contains(string) {
+            if self.isEmpty {
+                self = string
+            } else {
+                self += "\(separator)\(string)"
+            }
+        }
+    }
 }
