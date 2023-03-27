@@ -157,13 +157,17 @@ extension Double {
     ///
     /// - Returns: A formatted string representation of the numeric value as a baseball statistic.
     ///
-    /// This function uses the roundTo(places:) method to round the numeric value to three decimal places, and then formats the rounded value as a string with three decimal places using the String(format:) initializer.
-
-    /// If the formatted string starts with "0.", this function returns the string with the leading "0" removed. Otherwise, it returns the formatted string with three decimal places.
-
+    /// This function uses the roundTo(places:) method to round the numeric value to three decimal places, and then formats the rounded value as a string with either three decimal places as an integer or three decimal places using the String(format:) initializer.
+    
+    /// If the formatted string starts with "0.", and the rounded value is not a whole number, this function returns the string with the leading "0" removed. Otherwise, it returns the formatted string with three decimal places as an integer.
+    
     /// The resulting string is then returned as the result of this function.
     public func formatForBaseball() -> String {
-        let formattedValue = String(format: "%.3f", roundTo(places: 3))
+        let roundedValue = roundTo(places: 3)
+        if roundedValue.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(Int(roundedValue))
+        }
+        let formattedValue = String(format: "%.3f", roundedValue)
         if formattedValue.hasPrefix("0.") {
             return String(formattedValue.dropFirst(1))
         }
