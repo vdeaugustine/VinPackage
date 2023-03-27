@@ -106,8 +106,7 @@ extension View {
             }
         }
     }
-    
-    
+
     /// A utility function that returns a View with all its parts tappable, i.e., user interactions are detected for the entire view.
     ///
     /// - Parameter alignment: The alignment to be used for the ZStack.
@@ -124,8 +123,7 @@ extension View {
                 .opacity(0.001)
         }
     }
-    
-    
+
     /// A utility function that hides the software keyboard if it is currently visible.
     ///
     /// This function sends the resignFirstResponder action to the shared UIApplication object. This action resigns the first responder status of the current responder, which is the keyboard in this case. By sending this action, the keyboard is hidden if it is currently visible on the screen.
@@ -134,8 +132,7 @@ extension View {
     public func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
-    
-    
+
     /// A utility function that hides the navigation bar.
     ///
     /// - Returns: A View with the navigation bar hidden.
@@ -151,5 +148,82 @@ extension View {
         } else {
             return navigationBarTitle("", displayMode: .inline).navigationBarHidden(true)
         }
+    }
+
+    /// A view modifier that shows a double alert with a title, message, and an OK and Cancel button.
+    ///
+    /// Use this view modifier to present a double alert to the user. The alert has two buttons: OK and Cancel. When the user taps the OK button, the completion closure is called with a value of true, and the showAlert binding is set to false. When the user taps the Cancel button, the completion closure is called with a value of false, and the showAlert binding is set to false.
+    ///
+    /// Example usage:
+    ///
+    ///     struct ContentView: View {
+    ///        @State var showAlert = false
+    ///        @State var value = 0
+    ///
+    ///        var body: some View {
+    ///            VStack {
+    ///                Text("The value is \(value)")
+    ///                Button("Increment") {
+    ///                    showAlert = true
+    ///                }
+    ///            }
+    ///            .doubleAlert(showAlert: $showAlert, value: $value, title: "Increment Value", message: "Are you sure you want to increment the value?", completion: { result in
+    ///                if result {
+    ///                    value += 1
+    ///                }
+    ///            })
+    ///        }
+    ///     }
+    ///
+    /// - Parameters:
+    /// - showAlert: A binding to a Boolean value that controls whether to show the alert.
+    /// - value: A binding to a Double value that is used to display and modify the value shown in the alert.
+    /// - title: The title of the alert.
+    /// - message: The message of the alert.
+    /// - completion: A closure that is called when the user taps OK or Cancel. The closure is passed a Boolean value indicating whether the user tapped OK (true) or Cancel (false). The closure is called with a value of false when the user dismisses the alert without tapping a button. The default value is nil.
+    ///
+    /// - Returns: A view that shows a double alert.
+    @available(iOS 15.0, *)
+    func doubleAlert(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+        modifier(DoubleAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
+    }
+
+    
+    /// A view modifier that shows a int alert with a title, message, and an OK and Cancel button.
+    ///
+    /// Use this view modifier to present a int alert to the user. The alert has two buttons: OK and Cancel. When the user taps the OK button, the completion closure is called with a value of true, and the showAlert binding is set to false. When the user taps the Cancel button, the completion closure is called with a value of false, and the showAlert binding is set to false.
+    ///
+    /// Example usage:
+    ///
+    ///     struct ContentView: View {
+    ///        @State var showAlert = false
+    ///        @State var value = 0
+    ///
+    ///        var body: some View {
+    ///            VStack {
+    ///                Text("The value is \(value)")
+    ///                Button("Increment") {
+    ///                    showAlert = true
+    ///                }
+    ///            }
+    ///            .intAlert(showAlert: $showAlert, value: $value, title: "Increment Value", message: "Are you sure you want to increment the value?", completion: { result in
+    ///                if result {
+    ///                    value += 1
+    ///                }
+    ///            })
+    ///        }
+    ///     }
+    ///
+    /// - Parameters:
+    /// - showAlert: A binding to a Boolean value that controls whether to show the alert.
+    /// - value: A binding to a int value that is used to display and modify the value shown in the alert.
+    /// - title: The title of the alert.
+    /// - message: The message of the alert.
+    /// - completion: A closure that is called when the user taps OK or Cancel. The closure is passed a Boolean value indicating whether the user tapped OK (true) or Cancel (false). The closure is called with a value of false when the user dismisses the alert without tapping a button. The default value is nil.
+    ///
+    /// - Returns: A view that shows a int alert.
+    @available(iOS 15.0, *)
+    func intAlert(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+        modifier(IntAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 }
