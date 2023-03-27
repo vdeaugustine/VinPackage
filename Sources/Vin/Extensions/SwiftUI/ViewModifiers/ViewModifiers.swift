@@ -105,7 +105,7 @@ struct DoubleAlertViewModifier: ViewModifier {
 
 // A view modifier that displays an alert with a text field for editing an Int value.
 @available(iOS 15.0, *)
-struct IntAlertViewModifier: ViewModifier {
+public struct IntAlertViewModifier: ViewModifier {
     // State variables for showing the alert and storing the edited value.
     @Binding var showAlert: Bool
     @Binding var value: Int
@@ -140,7 +140,7 @@ struct IntAlertViewModifier: ViewModifier {
     }
     
     // The body of the view modifier.
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             // Show an alert with a text field for editing the value.
             .alert(title ?? "", isPresented: $showAlert) {

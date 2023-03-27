@@ -184,7 +184,7 @@ extension View {
     ///
     /// - Returns: A view that shows a double alert.
     @available(iOS 15.0, *)
-    func doubleAlert(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+    public func doubleAlert(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(DoubleAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 
@@ -223,7 +223,7 @@ extension View {
     ///
     /// - Returns: A view that shows a int alert.
     @available(iOS 15.0, *)
-    func intAlert(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+    public func intAlert(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(IntAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 }
