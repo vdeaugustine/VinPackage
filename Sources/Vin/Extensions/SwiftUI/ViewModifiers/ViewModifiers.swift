@@ -39,36 +39,36 @@ struct DoubleAlertViewModifier: ViewModifier {
     // State variables for showing the alert and storing the edited value.
     @Binding var showAlert: Bool
     @Binding var value: Double
-    
+
     // Optional title and message for the alert.
     var title: String?
     var message: String?
-    
+
     // State variable for the value of the text field.
     @State private var textFieldValue: Double
-    
+
     // Optional prompt for the text field and completion handler for when the alert is dismissed.
     let textFieldPrompt: String?
     let completion: ((Bool) -> Void)?
-    
+
     // Initialize the view modifier with the given parameters.
     init(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
         // Set the binding variables.
         _showAlert = showAlert
         _value = value
-        
+
         // Set the optional parameters.
         self.title = title
         self.message = message
-        
+
         // Initialize the state variable with the current value.
         _textFieldValue = State(initialValue: value.wrappedValue)
-        
+
         // Set the optional parameters.
         self.textFieldPrompt = textFieldPrompt
         self.completion = completion
     }
-    
+
     // The body of the view modifier.
     func body(content: Content) -> some View {
         content
@@ -77,14 +77,14 @@ struct DoubleAlertViewModifier: ViewModifier {
                 // The text field for editing the value.
                 TextField(textFieldPrompt ?? "Edit", value: $textFieldValue, format: .number)
                     .keyboardType(.decimalPad)
-                
+
                 // The "Submit" button saves the edited value and dismisses the alert.
                 Button("Submit") {
                     value = textFieldValue
                     showAlert = false
                     completion?(true)
                 }
-                
+
                 // The "Cancel" button dismisses the alert without saving the edited value.
                 Button("Cancel", role: .cancel) {
                     showAlert = false
@@ -97,9 +97,6 @@ struct DoubleAlertViewModifier: ViewModifier {
             }
     }
 }
-
-
-
 
 // MARK: - IntAlertViewModifier
 
@@ -109,36 +106,36 @@ public struct IntAlertViewModifier: ViewModifier {
     // State variables for showing the alert and storing the edited value.
     @Binding var showAlert: Bool
     @Binding var value: Int
-    
+
     // Optional title and message for the alert.
     var title: String?
     var message: String?
-    
+
     // State variable for the value of the text field.
     @State private var textFieldValue: Int
-    
+
     // Optional prompt for the text field and completion handler for when the alert is dismissed.
     let textFieldPrompt: String?
     let completion: ((Bool) -> Void)?
-    
+
     // Initialize the view modifier with the given parameters.
     init(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
         // Set the binding variables.
         _showAlert = showAlert
         _value = value
-        
+
         // Set the optional parameters.
         self.title = title
         self.message = message
-        
+
         // Initialize the state variable with the current value.
         _textFieldValue = State(initialValue: value.wrappedValue)
-        
+
         // Set the optional parameters.
         self.textFieldPrompt = textFieldPrompt
         self.completion = completion
     }
-    
+
     // The body of the view modifier.
     public func body(content: Content) -> some View {
         content
@@ -147,7 +144,7 @@ public struct IntAlertViewModifier: ViewModifier {
                 // The text field for editing the value.
                 TextField(textFieldPrompt ?? "Edit", value: $textFieldValue, format: .number)
                     .keyboardType(.numberPad)
-                
+
                 // The "Submit" button saves the edited value and dismisses the alert.
                 Button("Submit") {
                     // Make sure the value is not negative.
@@ -155,7 +152,7 @@ public struct IntAlertViewModifier: ViewModifier {
                     showAlert = false
                     completion?(true)
                 }
-                
+
                 // The "Cancel" button dismisses the alert without saving the edited value.
                 Button("Cancel", role: .cancel) {
                     showAlert = false
@@ -169,3 +166,77 @@ public struct IntAlertViewModifier: ViewModifier {
     }
 }
 
+// MARK: - TextFieldAlert
+
+@available(iOS 15.0, *)
+struct TextFieldAlert: ViewModifier {
+    // State variables for showing the alert and storing the edited value.
+    @Binding var showAlert: Bool
+    @Binding var text: String
+
+    // Optional title and message for the alert.
+    var title: String?
+    var message: String?
+
+    let oldValue: String
+
+    // Optional prompt for the text field and completion handler for when the alert is dismissed.
+    let textFieldPrompt: String?
+    let completion: ((Bool) -> Void)?
+
+    /**
+     Initializes the view modifier with the given parameters.
+
+     - Parameters:
+        - showAlert: A binding to a boolean that controls whether the alert is shown.
+        - text: A binding to the string value to edit.
+        - title: An optional title for the alert.
+        - message: An optional message for the alert.
+        - textFieldPrompt: An optional prompt for the text field.
+        - completion: An optional completion handler that is called when the alert is dismissed. If the user clicks the "Submit" button, the completion handler is called with a `true` value. If the user clicks the "Cancel" button, the completion handler is called with a `false` value.
+     */
+    init(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
+        // Set the binding variables.
+        _showAlert = showAlert
+        _text = text
+
+        // Set the optional parameters.
+        self.title = title
+        self.message = message
+
+        // Set the optional parameters.
+        self.textFieldPrompt = textFieldPrompt
+        self.completion = completion
+
+        self.oldValue = text.wrappedValue
+    }
+
+    // The body of the view modifier.
+    func body(content: Content) -> some View {
+        content
+            // Show an alert with a text field for editing the value.
+            .alert(title ?? "", isPresented: $showAlert) {
+                // The text field for editing the value.
+                //                TextField(textFieldPrompt ?? "", value: $text)
+                //                    .keyboardType(.decimalPad)
+                TextField(textFieldPrompt ?? "", text: $text)
+
+                // The "Submit" button saves the edited value and dismisses the alert.
+                Button("Submit") {
+                    showAlert = false
+                    completion?(true)
+                }
+
+                // The "Cancel" button dismisses the alert without saving the edited value.
+                Button("Cancel", role: .cancel) {
+                    showAlert = false
+                    text = oldValue
+                }
+            } message: {
+                // An optional message for the alert.
+                if let message = message {
+                    Text(message)
+                }
+            }
+    }
+}

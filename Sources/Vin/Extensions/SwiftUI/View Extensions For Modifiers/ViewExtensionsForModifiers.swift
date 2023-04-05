@@ -188,7 +188,6 @@ extension View {
         modifier(DoubleAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 
-    
     /// A view modifier that shows a int alert with a title, message, and an OK and Cancel button.
     ///
     /// Use this view modifier to present a int alert to the user. The alert has two buttons: OK and Cancel. When the user taps the OK button, the completion closure is called with a value of true, and the showAlert binding is set to false. When the user taps the Cancel button, the completion closure is called with a value of false, and the showAlert binding is set to false.
@@ -225,5 +224,53 @@ extension View {
     @available(iOS 15.0, *)
     public func intAlert(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(IntAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
+    }
+
+    
+    /**
+     A convenience function for applying the `TextFieldAlert` view modifier.
+
+     Use this function to simplify the process of applying the `TextFieldAlert` view modifier to a view.
+
+     The following example shows how to use the `textFieldAlert` function to edit a string value:
+
+         struct ContentView: View {
+             @State var name = "John"
+             @State var showAlert = false
+
+             var body: some View {
+                 VStack {
+                     Text("Hello, \(name)!")
+
+                     Button("Edit Name") {
+                         showAlert = true
+                     }
+
+                     // Apply the `textFieldAlert` function to the `Text` view to add an alert for editing the name.
+                     Text(name)
+                         .textFieldAlert(showAlert: $showAlert, text: $name, title: "Edit Name", textFieldPrompt: "Enter your name", completion: { success in
+                             if success {
+                                 print("Name saved successfully")
+                             } else {
+                                 print("Name edit cancelled")
+                             }
+                         }))
+                 }
+             }
+         }
+
+     - Parameters:
+        - showAlert: A binding to a boolean that controls whether the alert is shown.
+        - text: A binding to the string value to edit.
+        - title: An optional title for the alert.
+        - message: An optional message for the alert.
+        - textFieldPrompt: An optional prompt for the text field.
+        - completion: An optional completion handler that is called when the alert is dismissed. If the user clicks the "Submit" button, the completion handler is called with a `true` value. If the user clicks the "Cancel" button, the completion handler is called with a `false` value.
+
+     - Returns: A view with the `TextFieldAlert` view modifier applied.
+     */
+    @available(iOS 15.0, *)
+    func textFieldAlert(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+        modifier(TextFieldAlert(showAlert: showAlert, text: text, title: title, message: message, textFieldPrompt: textFieldPrompt, completion: completion))
     }
 }
