@@ -195,7 +195,7 @@ public struct TextFieldAlert: ViewModifier {
         - textFieldPrompt: An optional prompt for the text field.
         - completion: An optional completion handler that is called when the alert is dismissed. If the user clicks the "Submit" button, the completion handler is called with a `true` value. If the user clicks the "Cancel" button, the completion handler is called with a `false` value.
      */
-    init(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
+    public init(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
         // Set the binding variables.
         _showAlert = showAlert
         _text = text
@@ -212,7 +212,7 @@ public struct TextFieldAlert: ViewModifier {
     }
 
     // The body of the view modifier.
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             // Show an alert with a text field for editing the value.
             .alert(title ?? "", isPresented: $showAlert) {
