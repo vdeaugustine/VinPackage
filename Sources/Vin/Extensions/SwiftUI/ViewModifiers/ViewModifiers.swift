@@ -169,7 +169,7 @@ public struct IntAlertViewModifier: ViewModifier {
 // MARK: - TextFieldAlert
 
 @available(iOS 15.0, *)
-struct TextFieldAlert: ViewModifier {
+public struct TextFieldAlert: ViewModifier {
     // State variables for showing the alert and storing the edited value.
     @Binding var showAlert: Bool
     @Binding var text: String
