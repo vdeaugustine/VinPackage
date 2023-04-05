@@ -270,7 +270,7 @@ extension View {
      - Returns: A view with the `TextFieldAlert` view modifier applied.
      */
     @available(iOS 15.0, *)
-    func textFieldAlert(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+    public func textFieldAlert(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(TextFieldAlert(showAlert: showAlert, text: text, title: title, message: message, textFieldPrompt: textFieldPrompt, completion: completion))
     }
 }
