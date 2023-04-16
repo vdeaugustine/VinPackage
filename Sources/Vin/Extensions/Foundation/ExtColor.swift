@@ -52,4 +52,7 @@ extension Color {
     static public func hexStringToColor(hex: String) -> Color {
         Color(hexStringToUIColor(hex: hex))
     }
+    
+    /// The same background color as a SwiftUI list in light mode 
+    static let listBackgroundColor: Color = hexStringToColor(hex: "F2F2F7")
 }
