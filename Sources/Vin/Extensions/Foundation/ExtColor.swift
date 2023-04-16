@@ -54,5 +54,5 @@ extension Color {
     }
     
     /// The same background color as a SwiftUI list in light mode 
-    static let listBackgroundColor: Color = hexStringToColor(hex: "F2F2F7")
+    static public let listBackgroundColor: Color = hexStringToColor(hex: "F2F2F7")
 }
