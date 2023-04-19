@@ -240,3 +240,36 @@ public struct TextFieldAlert: ViewModifier {
             }
     }
 }
+
+// MARK: - NavigationBarDisplayModeModifier
+
+/**
+ A view modifier that wraps a view in a `NavigationView` and sets the navigation title display mode.
+
+ Use this modifier to wrap a view in a `NavigationView` and set the display mode of the navigation title. The `displayMode` parameter determines the display mode of the navigation title.
+
+``` Example:
+ Text("Hello, World!")
+    .navigationBarDisplayMode(.inline)
+
+ */
+@available(iOS 14.0, *)
+public struct PutInNavView: ViewModifier {
+    /// The display mode of the navigation title.
+    var displayMode: NavigationBarItem.TitleDisplayMode
+
+    /**
+     Applies the `NavigationBarDisplayModeModifier` to a view.
+
+     This method wraps a view in a `NavigationView` and sets the display mode of the navigation title. The `navigationBarTitleDisplayMode` modifier is applied to the content with the `displayMode` parameter.
+
+     - Parameter content: The content to wrap in a `NavigationView`.
+     - Returns: A modified version of the content with the `NavigationBarDisplayModeModifier` applied.
+     */
+    public func body(content: Content) -> some View {
+        NavigationView {
+            content
+                .navigationBarTitleDisplayMode(displayMode)
+        }
+    }
+}

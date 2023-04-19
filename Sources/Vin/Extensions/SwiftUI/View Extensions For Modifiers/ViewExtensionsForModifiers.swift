@@ -226,7 +226,6 @@ extension View {
         modifier(IntAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 
-    
     /**
      A convenience function for applying the `TextFieldAlert` view modifier.
 
@@ -272,5 +271,21 @@ extension View {
     @available(iOS 15.0, *)
     public func textFieldAlert(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(TextFieldAlert(showAlert: showAlert, text: text, title: title, message: message, textFieldPrompt: textFieldPrompt, completion: completion))
+    }
+
+    /**
+      A view extension that applies the `PutInNavView` view modifier to a view.
+
+      Use this extension to apply the `PutInNavView` to a view. The `displayMode` parameter determines the display mode of the navigation title.
+
+     ``` Example:
+      Text("Hello, World!")
+         .putInNavView(.inline)
+
+      */
+
+    @available(iOS 14.0, *)
+    public func putInNavView(_ displayMode: NavigationBarItem.TitleDisplayMode) -> some View {
+        modifier(PutInNavView(displayMode: displayMode))
     }
 }
