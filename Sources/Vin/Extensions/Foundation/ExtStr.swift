@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  ExtStr.swift
+//
 //
 //  Created by Vincent DeAugustine on 3/22/23.
 //
@@ -8,8 +8,6 @@
 import Foundation
 
 extension String {
-    
-    
     /// A utility function that removes all characters after the specified character in a string.
     ///
     /// - Parameter character: The character after which all characters should be removed.
@@ -26,7 +24,7 @@ extension String {
         }
         return str
     }
-    
+
     /// An extension to the String type that provides a method for extracting a Double value from a string containing a dollar amount.
     ///
     /// - Returns: An optional Double representing the dollar amount extracted from the string.
@@ -40,7 +38,7 @@ extension String {
         let editedStr = replacingOccurrences(of: "$", with: "")
         return Double(editedStr)
     }
-    
+
     /// An extension to the String type that provides a method for formatting a string as a dollar amount.
     ///
     /// - Parameter makeCents: A Boolean value indicating whether to include cents in the formatted string.
@@ -59,7 +57,7 @@ extension String {
         }
         return amount.formattedForMoney(includeCents: makeCents)
     }
-    
+
     /// An extension to the String type that provides a method for removing all characters in the string after and including a specified character.
     ///
     /// - Parameter character: The character after which to remove all characters in the string.
@@ -78,7 +76,7 @@ extension String {
         }
         return str
     }
-    
+
     /// An extension to the String type that provides a method for removing all white spaces from the string.
     ///
     /// - Returns: A new string with all white spaces removed.
@@ -87,7 +85,7 @@ extension String {
     public func removingWhiteSpaces() -> String {
         return components(separatedBy: .whitespaces).joined()
     }
-    
+
     /// An extension to the String type that provides a method for joining the string with other strings using a separator.
     ///
     /// - Parameters:
@@ -101,7 +99,7 @@ extension String {
         arr.insert(self, at: 0)
         return arr.joined(separator: separator)
     }
-    
+
     /// Appends a string to a string only if it does not already contain it.
     ///
     /// - Parameters:
@@ -111,12 +109,61 @@ extension String {
     /// Modifies the string instance that this function is called on. If the provided string is nil or the receiver already contains the provided string, no changes will be made. If the receiver is empty, the provided string will be appended without the separator. Otherwise, the provided separator will be used to join the current value and the new string.
     public mutating func appendIfNotContains(_ string: String?, separator: String = ",") {
         guard let string = string else { return }
-        if !self.contains(string) {
-            if self.isEmpty {
+        if !contains(string) {
+            if isEmpty {
                 self = string
             } else {
                 self += "\(separator)\(string)"
             }
         }
+    }
+
+    /**
+     This function removes all accents (diacritical marks) from a given string.
+
+     Example usage:
+
+         let accentedString = "Café"
+         let unaccentedString = removeAccents(from: accentedString)
+         print(unaccentedString) // "Cafe"
+
+     - Returns: A new string with all accents removed.
+     */
+    public func removeAccents() -> String {
+        // Decompose the string with canonical mapping to separate the base character and its accent.
+        let decomposedString = decomposedStringWithCanonicalMapping
+
+        // Filter out all non-spacing and spacing marks, which include accents.
+        let filteredScalars = decomposedString.unicodeScalars.filter { scalar in
+            let generalCategory = scalar.properties.generalCategory
+            return generalCategory != .nonspacingMark && generalCategory != .spacingMark
+        }
+
+        // Recompose the remaining scalars into a new string without accents.
+        let resultString = String(filteredScalars)
+
+        // Return the new string without accents.
+        return resultString
+    }
+
+    /**
+     This function removes all non-alphanumeric characters from a given string, except for the period (.) and hyphen (-) characters.
+
+      Example usage:
+
+          let unfilteredString = "This is a string with non-alphanumeric characters: $10, !@#$%^&*()-+={}[]|\:;'<>,.?/~`"
+          let filteredString = removingNonAlphanumericCharacters(from: unfilteredString)
+          print(filteredString) // "This is a string with non-alphanumeric characters 10-"
+
+      - Returns: A new string with all non-alphanumeric characters removed, except for the period (.) and hyphen (-) characters.
+      */
+    public func removingNonAlphanumericCharacters() -> String {
+        // Define the set of allowed characters, which includes all alphanumeric characters, as well as the period (.) and hyphen (-) characters.
+        let allowedCharacters = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: ".-"))
+        // Filter out all non-allowed characters from the input string and join the remaining components into a new string.
+        let filteredString = components(separatedBy: allowedCharacters.inverted).joined()
+
+        // Return the new string without non-alphanumeric characters, except for the period (.) and hyphen (-) characters.
+        return filteredString
     }
 }
