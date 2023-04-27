@@ -84,4 +84,28 @@ class DateTests: XCTestCase {
         let latestWeekday = weekdays.first!
         XCTAssert(calendar.isDate(latestWeekday, inSameDayAs: today.addDays(-1)) == true, "First item should be the most previous weekday")
     }
+
+    func testIsWeekdayForWeekdayDate() {
+        // Test that a weekday date returns true.
+        let date = Date(fromString: "02/02/2022")! // February 2, 2022, which is a Wednesday
+        XCTAssertTrue(Date.isWeekday(date), date.getFormattedDate(format: .shortWeekdayFullDayMonthYear))
+    }
+
+    func testIsWeekdayForWeekendDate() {
+        // Test that a weekend date returns false.
+        let date = Date(fromString: "02/05/2022")! // February 5, 2022, which is a Saturday
+        XCTAssertFalse(Date.isWeekday(date), date.getFormattedDate(format: .shortWeekdayFullDayMonthYear))
+    }
+
+    func testIsWeekdayForLeapYearDate() {
+        // Test that a date in a leap year returns true.
+        let date = Date(fromString: "02/29/2020")! // February 29, 2020, which is a Saturday
+        XCTAssertFalse(Date.isWeekday(date), date.getFormattedDate(format: .shortWeekdayFullDayMonthYear))
+    }
+
+    func testIsWeekdayForNonLeapYearDate() {
+        // Test that a date not in a leap year returns true.
+        let date = Date(fromString: "02/28/2021")! // February 28, 2021, which is a Sunday
+        XCTAssertFalse(Date.isWeekday(date), date.getFormattedDate(format: .shortWeekdayFullDayMonthYear))
+    }
 }

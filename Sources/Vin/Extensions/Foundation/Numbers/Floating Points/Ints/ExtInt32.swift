@@ -1,13 +1,13 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Vincent DeAugustine on 3/27/23.
 //
 
 import Foundation
 
-extension Int32 {
+public extension Int32 {
     /// An extension to the Int32 type that provides a computed property for converting an integer to a string with a suffix indicating the position of the number.
     ///
     /// - Returns: A String representation of the integer with a suffix indicating its position.
@@ -17,25 +17,24 @@ extension Int32 {
     /// The suffixes added are "st" for numbers ending in 1 (except for numbers ending in 11), "nd" for numbers ending in 2 (except for numbers ending in 12), "rd" for numbers ending in 3 (except for numbers ending in 13), and "th" for all other numbers.
 
     /// The resulting string is then returned as the result of this computed property.
-    public var withSuffix: String {
+    var withSuffix: String {
         func addSuffixToNumber(_ number: Int32) -> String {
             let suffix: String
             switch number % 10 {
-            case 1 where number % 100 != 11:
-                suffix = "st"
-            case 2 where number % 100 != 12:
-                suffix = "nd"
-            case 3 where number % 100 != 13:
-                suffix = "rd"
-            default:
-                suffix = "th"
+                case 1 where number % 100 != 11:
+                    suffix = "st"
+                case 2 where number % 100 != 12:
+                    suffix = "nd"
+                case 3 where number % 100 != 13:
+                    suffix = "rd"
+                default:
+                    suffix = "th"
             }
             return "\(number)\(suffix)"
         }
         return addSuffixToNumber(self)
     }
-    
-    
+
     /// An extension to the Int32 type that provides a method for checking whether one integer is a multiple of another.
     ///
     /// - Parameters:
@@ -48,11 +47,10 @@ extension Int32 {
     /// If the remainder is zero, this method returns true, indicating that the integer is a multiple of the specified value. Otherwise, it returns false.
 
     /// The resulting Boolean value is then returned as the result of this method.
-    public func isMultiple(of other: Int32) -> Bool {
+    func isMultiple(of other: Int32) -> Bool {
         self % other == 0
     }
-    
-    
+
     /// A utility function that formats a numeric value as a currency string.
     ///
     /// - Returns: A formatted string representation of the numeric value as a currency.
@@ -60,11 +58,11 @@ extension Int32 {
     /// This function first creates a Double value from the original integer value self. It then calls the formattedForMoney() method of the Double type to format the value as a currency string.
 
     /// The resulting string is then returned as the result of this function.
-    public func formatForMoney() -> String {
+    func formatForMoney() -> String {
         let dub = Double(self)
         return dub.formattedForMoney()
     }
-    
+
     /// A computed property that returns a string representation of the numeric value.
     ///
     /// - Returns: A string representation of the numeric value.
@@ -72,7 +70,7 @@ extension Int32 {
     /// This property simply returns the string representation of the original numeric value self.
 
     /// The resulting string is then returned as the result of this property.
-    public var str: String {
+    var str: String {
         "\(self)"
     }
 }

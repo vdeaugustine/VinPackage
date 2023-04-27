@@ -12,7 +12,7 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 /// A modifier that applies custom font, color, and weight settings to a view.
-struct CustomFontModifier: ViewModifier {
+public struct CustomFontModifier: ViewModifier {
     /// The font size to apply.
     let size: CGFloat
     /// The color to apply, specified as a hexadecimal string.
@@ -35,7 +35,7 @@ struct CustomFontModifier: ViewModifier {
 
 // A view modifier that displays an alert with a text field for editing a Double value.
 @available(iOS 15.0, *)
-struct DoubleAlertViewModifier: ViewModifier {
+public struct DoubleAlertViewModifier: ViewModifier {
     // State variables for showing the alert and storing the edited value.
     @Binding var showAlert: Bool
     @Binding var value: Double
@@ -52,7 +52,7 @@ struct DoubleAlertViewModifier: ViewModifier {
     let completion: ((Bool) -> Void)?
 
     // Initialize the view modifier with the given parameters.
-    init(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
+    public init(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) {
         // Set the binding variables.
         _showAlert = showAlert
         _value = value
@@ -70,7 +70,7 @@ struct DoubleAlertViewModifier: ViewModifier {
     }
 
     // The body of the view modifier.
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             // Show an alert with a text field for editing the value.
             .alert(title ?? "", isPresented: $showAlert) {
@@ -241,18 +241,18 @@ public struct TextFieldAlert: ViewModifier {
     }
 }
 
-// MARK: - NavigationBarDisplayModeModifier
+// MARK: - PutInNavView
 
 /**
- A view modifier that wraps a view in a `NavigationView` and sets the navigation title display mode.
+  A view modifier that wraps a view in a `NavigationView` and sets the navigation title display mode.
 
- Use this modifier to wrap a view in a `NavigationView` and set the display mode of the navigation title. The `displayMode` parameter determines the display mode of the navigation title.
+  Use this modifier to wrap a view in a `NavigationView` and set the display mode of the navigation title. The `displayMode` parameter determines the display mode of the navigation title.
 
-``` Example:
- Text("Hello, World!")
-    .navigationBarDisplayMode(.inline)
+ ``` Example:
+  Text("Hello, World!")
+     .navigationBarDisplayMode(.inline)
 
- */
+  */
 @available(iOS 14.0, *)
 public struct PutInNavView: ViewModifier {
     /// The display mode of the navigation title.
@@ -273,6 +273,8 @@ public struct PutInNavView: ViewModifier {
         }
     }
 }
+
+// MARK: - TabModifier
 
 /// A generic `ViewModifier` that adds a tab item to a view with a system image and the associated description.
 ///
@@ -313,4 +315,3 @@ public struct TabModifier<T: RawRepresentable>: ViewModifier where T.RawValue ==
             .tag(tab)
     }
 }
-

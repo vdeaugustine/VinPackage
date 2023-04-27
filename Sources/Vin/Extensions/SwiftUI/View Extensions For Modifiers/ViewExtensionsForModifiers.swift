@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - View Extensions
 
 @available(iOS 13.0, *)
-extension View {
+public extension View {
     /// Applies a custom font, color, and weight to the view.
     ///
     /// - Parameters:
@@ -19,7 +19,7 @@ extension View {
     ///   - color: The color to apply, specified as a hexadecimal string.
     ///   - weight: The font weight to apply. Defaults to regular weight.
     /// - Returns: The modified view.
-    public func customFont(size: CGFloat, color: String, weight: Font.Weight = .regular) -> some View {
+    func customFont(size: CGFloat, color: String, weight: Font.Weight = .regular) -> some View {
         modifier(CustomFontModifier(size: size, color: color, weight: weight))
     }
 
@@ -31,7 +31,7 @@ extension View {
     ///
     /// - Parameter otherView: A closure returning a View that will be spaced out from the original view.
     /// - Returns: A modified version of the view with additional space added between it and the otherView.
-    public func spacedOut<Content: View>(@ViewBuilder otherView: () -> Content) -> some View {
+    func spacedOut<Content: View>(@ViewBuilder otherView: () -> Content) -> some View {
         // Create an HStack with the original view on the left, a Spacer in the middle, and the otherView on the right.
         HStack {
             self
@@ -47,7 +47,7 @@ extension View {
     /// - Returns: A SwiftUI View that has been left-pushed with spacing applied.
     ///
     /// - Note: This function uses the Spacer view to create the space between views, and the spacedOut modifier to apply the spacing to the returned View.
-    public func pushLeft() -> some View {
+    func pushLeft() -> some View {
         spacedOut {
             Spacer()
         }
@@ -58,7 +58,7 @@ extension View {
     /// The centerInParentView modifier can be used to center a view vertically and horizontally within its parent view.
     ///
     /// - Returns: A modified version of the view that is centered within its parent view.
-    public func centerInParentView() -> some View {
+    func centerInParentView() -> some View {
         // Use a VStack to center the view vertically within its parent view.
         VStack(alignment: .center) {
             self
@@ -75,7 +75,7 @@ extension View {
     ///
     /// This function uses the SwiftUI toolbar modifier to add a toolbar to the view hierarchy. It then creates a ToolbarItem with a placement of .navigationBarTrailing to specify the location of the item within the toolbar. Finally, it creates a Button with the label "Save" and the action of execute() when tapped. The closure execute is passed as a parameter to this function, and will be executed when the "Save" button is tapped.
     @available(iOS 14.0, *)
-    public func toolbarSave(_ execute: @escaping () -> Void) -> some View {
+    func toolbarSave(_ execute: @escaping () -> Void) -> some View {
         toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Save") {
@@ -95,7 +95,7 @@ extension View {
     ///
     /// The destination parameter must return a type that conforms to the View protocol.
     @available(iOS 14.0, *)
-    public func toolbarAdd<Destination>(@ViewBuilder destination: () -> Destination) -> some View where Destination: View {
+    func toolbarAdd<Destination>(@ViewBuilder destination: () -> Destination) -> some View where Destination: View {
         toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink {
@@ -116,7 +116,7 @@ extension View {
     /// This function returns a ZStack with the current view on the bottom and a Color view on the top with an opacity of 0.001. This allows the ZStack to detect user interactions for the entire view, even if the top Color view is transparent.
     ///
     /// The alignment parameter is an optional parameter that can be used to specify the alignment of the views within the ZStack. If no alignment is specified, the default value of .center is used.
-    public func allPartsTappable(alignment: Alignment? = nil) -> some View {
+    func allPartsTappable(alignment: Alignment? = nil) -> some View {
         ZStack(alignment: alignment ?? .center) {
             self
             Color.white
@@ -129,7 +129,7 @@ extension View {
     /// This function sends the resignFirstResponder action to the shared UIApplication object. This action resigns the first responder status of the current responder, which is the keyboard in this case. By sending this action, the keyboard is hidden if it is currently visible on the screen.
     ///
     /// This function does not take any parameters or return any values. It simply hides the software keyboard when called.
-    public func hideKeyboard() {
+    func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
@@ -142,7 +142,7 @@ extension View {
     /// If the iOS version is less than iOS 16, it returns the current view with an empty navigation bar title and the navigation bar hidden. This is achieved using the navigationBarTitle modifier with an empty string and the navigationBarHidden modifier with a value of true.
     ///
     /// This function does not take any parameters. It simply returns a modified View with the navigation bar hidden.
-    public func hideNav() -> some View {
+    func hideNav() -> some View {
         if #available(iOS 16, *) {
             return self.toolbar(.hidden)
         } else {
@@ -184,7 +184,7 @@ extension View {
     ///
     /// - Returns: A view that shows a double alert.
     @available(iOS 15.0, *)
-    public func doubleAlert(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+    func doubleAlert(showAlert: Binding<Bool>, value: Binding<Double>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(DoubleAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 
@@ -222,7 +222,7 @@ extension View {
     ///
     /// - Returns: A view that shows a int alert.
     @available(iOS 15.0, *)
-    public func intAlert(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+    func intAlert(showAlert: Binding<Bool>, value: Binding<Int>, title: String? = nil, message: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(IntAlertViewModifier(showAlert: showAlert, value: value, title: title, message: message, completion: completion))
     }
 
@@ -269,7 +269,7 @@ extension View {
      - Returns: A view with the `TextFieldAlert` view modifier applied.
      */
     @available(iOS 15.0, *)
-    public func textFieldAlert(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
+    func textFieldAlert(showAlert: Binding<Bool>, text: Binding<String>, title: String? = nil, message: String? = nil, textFieldPrompt: String? = nil, completion: ((Bool) -> Void)? = nil) -> some View {
         modifier(TextFieldAlert(showAlert: showAlert, text: text, title: title, message: message, textFieldPrompt: textFieldPrompt, completion: completion))
     }
 
@@ -285,10 +285,10 @@ extension View {
       */
 
     @available(iOS 14.0, *)
-    public func putInNavView(_ displayMode: NavigationBarItem.TitleDisplayMode) -> some View {
+    func putInNavView(_ displayMode: NavigationBarItem.TitleDisplayMode) -> some View {
         modifier(PutInNavView(displayMode: displayMode))
     }
-    
+
     /// A function that applies a `TabModifier` to a view, creating a tab item with a system image and the associated description.
     ///
     /// The function requires a type `T` that conforms to `RawRepresentable`, `Hashable`, and `CustomStringConvertible` protocols.
@@ -312,8 +312,7 @@ extension View {
     /// - Returns: A view with the tab item and tag applied using the `TabModifier`.
     ///
     @available(iOS 14.0, *)
-    public func makeTab<T: RawRepresentable>(tab: T, systemImage: String) -> some View where T.RawValue == String, T: Hashable, T: CustomStringConvertible {
-        self.modifier(TabModifier(tab: tab, systemImage: systemImage))
+    func makeTab<T: RawRepresentable>(tab: T, systemImage: String) -> some View where T.RawValue == String, T: Hashable, T: CustomStringConvertible {
+        modifier(TabModifier(tab: tab, systemImage: systemImage))
     }
-
 }
