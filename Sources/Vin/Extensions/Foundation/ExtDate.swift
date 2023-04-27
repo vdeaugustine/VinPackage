@@ -251,4 +251,64 @@ extension Date {
 
         public var description: String { rawValue }
     }
+    
+    
+    /// Returns an array of the previous `count` weekday dates, excluding weekends.
+    ///
+    /// This function iterates through past dates and appends them to an array if they are weekdays
+    /// (i.e., Monday to Friday). It continues this process until the required number of weekdays
+    /// is collected, as specified by the `count` parameter.
+    ///
+    /// - Parameter count: The number of weekdays to include in the returned array.
+    ///
+    /// - Returns: An array of `Date` objects representing the previous `count` weekdays.
+    public static func getPreviousWeekdays(count: Int) -> [Date] {
+        var weekdays: [Date] = []
+        var dayCount = 0
+        var date = Date()
+        
+        while weekdays.count < count {
+            date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+            let components = Calendar.current.dateComponents([.weekday], from: date)
+            
+            if let weekday = components.weekday, weekday >= 2 && weekday <= 6 {
+                weekdays.append(date)
+            }
+            
+            dayCount += 1
+            if dayCount > 365 {
+                break // exit loop if we've gone back a year and haven't found enough weekdays
+            }
+        }
+        
+        return weekdays
+    }
+
+
+    /// Returns an array of the next `count` weekday dates, excluding weekends.
+    ///
+    /// This function iterates through future dates and appends them to an array if they are weekdays
+    /// (i.e., Monday to Friday). It continues this process until the required number of weekdays
+    /// is collected, as specified by the `count` parameter.
+    ///
+    /// - Parameter count: The number of weekdays to include in the returned array.
+    ///
+    /// - Returns: An array of `Date` objects representing the next `count` weekdays.
+    public static func getNextWeekdays(count: Int) -> [Date] {
+        var weekdays = [Date]()
+        var date = Date()
+        
+        while weekdays.count < count {
+            date = date.addingTimeInterval(24 * 60 * 60)
+            let weekday = Calendar.current.component(.weekday, from: date)
+            if weekday >= 2 && weekday <= 6 {
+                weekdays.append(date)
+            }
+        }
+        
+        return weekdays
+    }
+    
+    
+    
 }
