@@ -288,4 +288,32 @@ extension View {
     public func putInNavView(_ displayMode: NavigationBarItem.TitleDisplayMode) -> some View {
         modifier(PutInNavView(displayMode: displayMode))
     }
+    
+    /// A function that applies a `TabModifier` to a view, creating a tab item with a system image and the associated description.
+    ///
+    /// The function requires a type `T` that conforms to `RawRepresentable`, `Hashable`, and `CustomStringConvertible` protocols.
+    /// The `RawValue` of the type `T` must be of type `String`.
+    ///
+    /// Usage:
+    ///
+    /// ```swift
+    /// TabView {
+    ///     Text("Tab 1")
+    ///         .makeTab(tab: MyTabEnum.tab1, systemImage: "star.fill")
+    ///     Text("Tab 2")
+    ///         .makeTab(tab: MyTabEnum.tab2, systemImage: "heart.fill")
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - tab: A value of type `T`, representing the current tab.
+    ///   - systemImage: A `String` representing the system image to be used as the icon for the tab item.
+    ///
+    /// - Returns: A view with the tab item and tag applied using the `TabModifier`.
+    ///
+    @available(iOS 14.0, *)
+    public func makeTab<T: RawRepresentable>(tab: T, systemImage: String) -> some View where T.RawValue == String, T: Hashable, T: CustomStringConvertible {
+        self.modifier(TabModifier(tab: tab, systemImage: systemImage))
+    }
+
 }

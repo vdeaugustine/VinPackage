@@ -273,3 +273,44 @@ public struct PutInNavView: ViewModifier {
         }
     }
 }
+
+/// A generic `ViewModifier` that adds a tab item to a view with a system image and the associated description.
+///
+/// The `TabModifier` requires a type `T` that conforms to `RawRepresentable`, `Hashable`, and `CustomStringConvertible` protocols.
+/// The `RawValue` of the type `T` must be of type `String`.
+///
+/// Usage:
+///
+/// ```swift
+/// TabView {
+///     Text("Tab 1")
+///         .modifier(TabModifier(tab: MyTabEnum.tab1, systemImage: "star.fill"))
+///     Text("Tab 2")
+///         .modifier(TabModifier(tab: MyTabEnum.tab2, systemImage: "heart.fill"))
+/// }
+/// ```
+///
+/// - Parameters:
+///   - tab: A value of type `T`, representing the current tab.
+///   - systemImage: A `String` representing the system image to be used as the icon for the tab item.
+///
+@available(iOS 14.0, *)
+public struct TabModifier<T: RawRepresentable>: ViewModifier where T.RawValue == String, T: Hashable, T: CustomStringConvertible {
+    public var tab: T
+    public var systemImage: String
+
+    /// The body of the `ViewModifier`. Applies the tab item and tag to the given `content`.
+    ///
+    /// - Parameter content: The content to apply the modifier to.
+    ///
+    /// - Returns: A view with the tab item and tag applied.
+    ///
+    public func body(content: Content) -> some View {
+        content
+            .tabItem {
+                Label(tab.description, systemImage: systemImage)
+            }
+            .tag(tab)
+    }
+}
+
