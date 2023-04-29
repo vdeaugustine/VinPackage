@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Element is a Double
+
 public extension Array where Element == Double {
     /// An extension to the Array type that provides a method for calculating the standard deviation of an array of Double values.
     ///
@@ -27,6 +29,8 @@ public extension Array where Element == Double {
         return standardDeviation
     }
 }
+
+// MARK: - All Array
 
 public extension Array {
     /// Returns a Boolean value indicating whether the provided index is within the bounds of the Array.
@@ -94,7 +98,7 @@ public extension Array {
         }
         return arr.joined(separator: separator)
     }
-    
+
     /// Accesses the element at the specified position in a safe way, returning `nil` if the index is out of bounds.
     ///
     /// This subscript allows you to access elements with negative indices, where the index `-n` corresponds to the nth element from the end of the array.
@@ -121,6 +125,8 @@ public extension Array {
     }
 }
 
+// MARK: - Element is Equatable
+
 public extension Array where Element: Equatable {
     /// An extension to the Array type that provides a method for finding the intersection of two arrays.
     ///
@@ -143,5 +149,17 @@ public extension Array where Element: Equatable {
         return result
     }
 
-    
+    /// Returns an array of indices for all occurrences of the specified element.
+    ///
+    /// - Parameter element: The element to find in the array.
+    /// - Returns: An array of indices for all occurrences of the specified element. If the element is not found, an empty array is returned.
+    func allIndices(of element: Element) -> [Int] {
+        var indices: [Int] = []
+        for (index, value) in enumerated() {
+            if value == element {
+                indices.append(index)
+            }
+        }
+        return indices
+    }
 }

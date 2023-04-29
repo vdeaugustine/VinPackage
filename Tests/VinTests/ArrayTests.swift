@@ -88,6 +88,33 @@ class ArrayExtensionTests: XCTestCase {
         XCTAssertEqual(suffix, expectedSuffix, "The suffix array should contain all the elements of the original array because the parameter is equal to the count of the array.")
     }
 
+    func testAllIndices() {
+        let numbers = [1, 2, 3, 1, 4, 5, 1]
+        let indicesOfOne = numbers.allIndices(of: 1)
+        XCTAssertEqual(indicesOfOne, [0, 3, 6])
+
+        let indicesOfTwo = numbers.allIndices(of: 2)
+        XCTAssertEqual(indicesOfTwo, [1])
+
+        let indicesOfThree = numbers.allIndices(of: 3)
+        XCTAssertEqual(indicesOfThree, [2])
+
+        let indicesOfFour = numbers.allIndices(of: 4)
+        XCTAssertEqual(indicesOfFour, [4])
+
+        let indicesOfFive = numbers.allIndices(of: 5)
+        XCTAssertEqual(indicesOfFive, [5])
+
+        let indicesOfNonExistentElement = numbers.allIndices(of: 10)
+        XCTAssertEqual(indicesOfNonExistentElement, [])
+    }
+
+    func testAllIndicesWithEmptyArray() {
+        let emptyArray: [Int] = []
+        let indices = emptyArray.allIndices(of: 1)
+        XCTAssertEqual(indices, [])
+    }
+
     static var allTests = [("testPositiveIndex", testPositiveIndex),
                            ("testNegativeIndex", testNegativeIndex),
                            ("testOutOfBoundsPositiveIndex", testOutOfBoundsPositiveIndex),
@@ -98,5 +125,4 @@ class ArrayExtensionTests: XCTestCase {
                            ("testSuffixArrayWithZero", testSuffixArrayWithZero),
                            ("testSuffixArrayWithGreaterThanCount", testSuffixArrayWithGreaterThanCount),
                            ("testSuffixArrayWithEqualCount", testSuffixArrayWithEqualCount)]
-
 }
