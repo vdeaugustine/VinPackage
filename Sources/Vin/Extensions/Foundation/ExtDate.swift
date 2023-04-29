@@ -7,11 +7,6 @@
 
 import Foundation
 
-/// Get business days
-public extension Calendar {
-    static let iso8601 = Calendar(identifier: .iso8601)
-}
-
 public extension Date {
     /// A Boolean value indicating whether the date is on a weekend day (Saturday or Sunday) using the ISO 8601 calendar.
     var isDateInWeekend: Bool {

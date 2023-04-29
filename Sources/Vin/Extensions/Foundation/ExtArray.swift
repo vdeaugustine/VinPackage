@@ -85,7 +85,7 @@ public extension Array {
         var arr: [String] = []
         for item in self {
             if let dub = item as? Double {
-                arr.append(dub.str())
+                arr.append(dub.simpleStr())
             } else if let int = item as? Int {
                 arr.append(int.str)
             } else {
@@ -93,6 +93,31 @@ public extension Array {
             }
         }
         return arr.joined(separator: separator)
+    }
+    
+    /// Accesses the element at the specified position in a safe way, returning `nil` if the index is out of bounds.
+    ///
+    /// This subscript allows you to access elements with negative indices, where the index `-n` corresponds to the nth element from the end of the array.
+    ///
+    /// - Parameter index: The position of the element to access. `index` can be negative.
+    /// - Returns: The element at the specified position, if the index is within the bounds of the array; otherwise, `nil`.
+    ///
+    /// # Examples
+    ///
+    ///     let array = [1, 2, 3, 4, 5]
+    ///
+    ///     print(array[safe: 1])  // Optional(2)
+    ///     print(array[safe: -2]) // Optional(4)
+    ///     print(array[safe: 7])  // nil
+    ///     print(array[safe: -6]) // nil
+    ///
+    subscript(safe index: Int) -> Element? {
+        if index >= 0 {
+            return indices.contains(index) ? self[index] : nil
+        } else {
+            let positiveIndex = count + index
+            return indices.contains(positiveIndex) ? self[positiveIndex] : nil
+        }
     }
 }
 
@@ -117,24 +142,6 @@ public extension Array where Element: Equatable {
         }
         return result
     }
-}
 
-public extension Sequence where Iterator.Element: Hashable {
-    /// An extension to the Sequence type that provides a method for checking if the sequence intersects with another sequence.
-    ///
-    /// - Parameters:
-    /// - sequence: Another sequence to check for intersection.
-    ///
-    /// - Returns: A Bool indicating whether the sequence intersects with the other sequence.
-    ///
-    /// This extension adds a method to the Sequence type that checks if the sequence intersects with another sequence. The method takes another sequence as an argument and checks if any of the elements in the sequence are also in the other sequence.
-
-    /// First, the method creates a Set from the other sequence to allow for fast lookups. Then, it uses the contains(where:) method to check if any of the elements in the sequence are also in the other sequence.
-
-    /// The resulting Bool value indicates whether the sequence intersects with the other sequence.
-    func intersects<S: Sequence>(with sequence: S) -> Bool
-        where S.Iterator.Element == Iterator.Element {
-        let sequenceSet = Set(sequence)
-        return contains(where: sequenceSet.contains)
-    }
+    
 }
