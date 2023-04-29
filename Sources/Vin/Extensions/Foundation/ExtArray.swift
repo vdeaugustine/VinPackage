@@ -162,4 +162,8 @@ public extension Array where Element: Equatable {
         }
         return indices
     }
+    
+    mutating func removeAll(of element: Element) {
+        removeAll { $0 == element }
+    }
 }

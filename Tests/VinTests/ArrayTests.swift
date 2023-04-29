@@ -114,6 +114,39 @@ class ArrayExtensionTests: XCTestCase {
         let indices = emptyArray.allIndices(of: 1)
         XCTAssertEqual(indices, [])
     }
+    
+    func testRemoveAll() {
+        var array = [1, 2, 2, 3, 4, 2, 5]
+        
+        array.removeAll(of: 2)
+        
+        XCTAssertEqual(array, [1, 3, 4, 5], "The function should remove all instances of the specified element from the array.")
+    }
+
+    func testRemoveAllEmptyArray() {
+        var array: [Int] = []
+        
+        array.removeAll(of: 1)
+        
+        XCTAssertEqual(array, [], "The function should not modify an empty array.")
+    }
+
+    func testRemoveAllNoMatchingElement() {
+        var array = [1, 2, 3, 4, 5]
+        
+        array.removeAll(of: 6)
+        
+        XCTAssertEqual(array, [1, 2, 3, 4, 5], "The function should not modify the array if the specified element is not found.")
+    }
+
+    func testRemoveAllString() {
+        var array = ["apple", "banana", "apple", "cherry", "grape"]
+        
+        array.removeAll(of: "apple")
+        
+        XCTAssertEqual(array, ["banana", "cherry", "grape"], "The function should remove all instances of the specified element from an array of strings.")
+    }
+
 
     static var allTests = [("testPositiveIndex", testPositiveIndex),
                            ("testNegativeIndex", testNegativeIndex),
