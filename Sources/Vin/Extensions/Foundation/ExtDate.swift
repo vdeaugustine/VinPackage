@@ -246,6 +246,13 @@ public extension Date {
 
         /// A string representation of the format "EEE. MMMM dd, yyyy". Example: "Wed. April 27, 2023".
         case shortWeekdayFullDayMonthYear = "EEE. MMMM dd, yyyy"
+        
+        /// yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ is an ISO 8601 format string
+        /// with milliseconds (SSS) and timezone (ZZZZZ) included for maximum
+        ///
+        ///     // Example usage:
+        ///     let dateString = "2023-04-29T16:15:30.123-07:00"
+        case percise = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
 
         public var description: String { rawValue }
     }

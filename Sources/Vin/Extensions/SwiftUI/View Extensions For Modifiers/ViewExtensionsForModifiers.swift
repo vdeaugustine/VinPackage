@@ -315,4 +315,10 @@ public extension View {
     func makeTab<T: RawRepresentable>(tab: T, systemImage: String) -> some View where T.RawValue == String, T: Hashable, T: CustomStringConvertible {
         modifier(TabModifier(tab: tab, systemImage: systemImage))
     }
+
+    
+    /// Returns the view calling it as an AnyView type
+    var anyView: AnyView {
+        AnyView(self)
+    }
 }
