@@ -316,9 +316,26 @@ public extension View {
         modifier(TabModifier(tab: tab, systemImage: systemImage))
     }
 
-    
     /// Returns the view calling it as an AnyView type
     var anyView: AnyView {
         AnyView(self)
+    }
+
+    /// Applies the `PushTopModifier` to a view, aligning the content to the top of the available space.
+    ///
+    /// Use `pushTop(alignment:)` to align the content to the top of the available space,
+    /// with the specified horizontal alignment, and push it to the top by adding a spacer below the content.
+    ///
+    /// Example usage:
+    /// ```
+    /// Text("Hello, World!")
+    ///     .pushTop(alignment: .center)
+    /// ```
+    ///
+    /// - Parameter alignment: The horizontal alignment for positioning the content within the available space.
+    ///                        The default value is `.center`.
+    /// - Returns: The modified content view with the `PushTopModifier` applied.
+    func pushTop(alignment: HorizontalAlignment = .center) -> some View {
+        modifier(PushTopModifier(alignment: alignment))
     }
 }

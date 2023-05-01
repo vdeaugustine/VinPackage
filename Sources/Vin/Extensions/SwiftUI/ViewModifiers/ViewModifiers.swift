@@ -315,3 +315,34 @@ public struct TabModifier<T: RawRepresentable>: ViewModifier where T.RawValue ==
             .tag(tab)
     }
 }
+
+/// A view modifier that aligns the content to the top of the available space.
+///
+/// Use `PushTopModifier` to align the content to the top of the available space,
+/// with the specified horizontal alignment, and push it to the top by adding a spacer below the content.
+///
+/// Example usage:
+/// ```
+/// Text("Hello, World!")
+///     .modifier(PushTopModifier(alignment: .center))
+/// ```
+@available(iOS 13.0, *)
+public struct PushTopModifier: ViewModifier {
+    /// The horizontal alignment for positioning the content within the available space.
+    var alignment: HorizontalAlignment
+    
+    /// The view modifier's body, which applies the alignment and pushes the content to the top.
+    ///
+    /// - Parameter content: The content to be aligned and pushed to the top.
+    /// - Returns: The modified content view.
+    public func body(content: Content) -> some View {
+        VStack(alignment: alignment) {
+            content
+            Spacer()
+        }
+    }
+}
+
+
+
+
