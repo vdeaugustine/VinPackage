@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import SwiftUI
 
 public extension Sequence where Iterator.Element: Hashable {
     /// An extension to the Sequence type that provides a method for checking if the sequence intersects with another sequence.
@@ -25,4 +27,14 @@ public extension Sequence where Iterator.Element: Hashable {
         let sequenceSet = Set(sequence)
         return contains(where: sequenceSet.contains)
     }
+}
+
+
+public extension NSSet? {
+    
+//    func getArray() -> [Element] {
+//        Array(self)
+//    }
+    
+    
 }

@@ -166,4 +166,34 @@ public extension String {
         // Return the new string without non-alphanumeric characters, except for the period (.) and hyphen (-) characters.
         return filteredString
     }
+
+    /// Returns a new string containing the first `n` characters of the original string.
+    ///
+    /// - Parameter n: The number of characters to take from the beginning of the string.
+    ///                If `n` is less than or equal to 0, an empty string will be returned.
+    ///                If `n` is greater than the string's length, the whole string will be returned.
+    /// - Returns: A string containing the first `n` characters of the original string.
+    func prefixStr(_ n: Int) -> String {
+        guard n > 0 else {
+            return ""
+        }
+
+        let endIndex = index(startIndex, offsetBy: min(n, count))
+        return String(self[startIndex ..< endIndex])
+    }
+
+    /// Returns a new string containing the last `n` characters of the original string.
+    ///
+    /// - Parameter n: The number of characters to take from the end of the string.
+    ///                If `n` is less than or equal to 0, an empty string will be returned.
+    ///                If `n` is greater than the string's length, the whole string will be returned.
+    /// - Returns: A string containing the last `n` characters of the original string.
+    func suffixStr(_ n: Int) -> String {
+        guard n > 0 else {
+            return ""
+        }
+
+        let startIndex = index(endIndex, offsetBy: -min(n, count))
+        return String(self[startIndex ..< endIndex])
+    }
 }
