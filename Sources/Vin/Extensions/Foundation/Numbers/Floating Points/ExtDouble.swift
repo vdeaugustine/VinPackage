@@ -51,12 +51,12 @@ public extension Double {
     /// The formatted string is then cleaned up and returned by the cleanDollarAmount function, which removes any leading or trailing dollar signs and formats any .00 cents amounts as whole dollar amounts. The cleaned string is then returned as the result of this function.
 
     /// If the numeric value cannot be formatted using the NumberFormatter class, this function returns the original value as a string.
-    func formattedForMoney(includeCents: Bool = true) -> String {
+    func formattedForMoney(includeCents: Bool = true, trimZeroCents: Bool = true) -> String {
         func cleanDollarAmount(amount: String) -> String {
             let dollarAmount = amount.trimmingCharacters(in: ["$"])
             if dollarAmount.isEmpty {
                 return "$0"
-            } else if dollarAmount.hasSuffix(".00") {
+            } else if dollarAmount.hasSuffix(".00"), trimZeroCents {
                 return "$" + dollarAmount.replacingOccurrences(of: ".00", with: "")
             } else {
                 return "$" + dollarAmount
