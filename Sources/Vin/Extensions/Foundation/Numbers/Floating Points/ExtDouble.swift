@@ -53,13 +53,17 @@ public extension Double {
     /// If the numeric value cannot be formatted using the NumberFormatter class, this function returns the original value as a string.
     func formattedForMoney(includeCents: Bool = true, trimZeroCents: Bool = true) -> String {
         func cleanDollarAmount(amount: String) -> String {
-            let dollarAmount = amount.trimmingCharacters(in: ["$"])
+            var dollarAmount = amount.replacingOccurrences(of: "$", with: "")
+            let isNegative = dollarAmount.hasPrefix("-")
+            if isNegative {
+                dollarAmount = dollarAmount.replacingOccurrences(of: "-", with: "")
+            }
             if dollarAmount.isEmpty {
                 return "$0"
             } else if dollarAmount.hasSuffix(".00"), trimZeroCents {
-                return "$" + dollarAmount.replacingOccurrences(of: ".00", with: "")
+                return (isNegative ? "-$" : "$") + dollarAmount.replacingOccurrences(of: ".00", with: "")
             } else {
-                return "$" + dollarAmount
+                return (isNegative ? "-$" : "$") + dollarAmount
             }
         }
 
@@ -89,55 +93,22 @@ public extension Double {
 
     /// The resulting string is then returned as the result of this function.
     func formattedForMoneyExtended(decimalPlaces: Int = 4) -> String {
-        guard let currencySymbol = Locale.current.currencySymbol,
-              let unicodeScalar = Unicode.Scalar(currencySymbol.unicodeScalars.first?.value ?? 36) else { return "" }
-        func cleanDollarAmount(amount: String, decimals: Int) -> String {
-            var decimalPlaces = decimals
-            let dollarAmount = amount.trimmingCharacters(in: [unicodeScalar])
-            if dollarAmount.isEmpty {
-                return "$0"
-            } else {
-                var roundedAmount = String(format: "%.\(decimalPlaces)f", Double(dollarAmount) ?? 0.0)
-                while roundedAmount.hasSuffix("0") && decimalPlaces < 11 {
-                    decimalPlaces += 1
-                    roundedAmount = String(format: "%.\(decimalPlaces)f", Double(dollarAmount) ?? 0.0)
-                }
-                func decimalSubstring(amount: String) -> String {
-                    let parts = amount.split(separator: ".")
-                    if parts.count == 2 {
-                        return String(parts[1])
-                    } else {
-                        return ""
-                    }
-                }
-                func integerSubstring(amount: String) -> String {
-                    let parts = amount.split(separator: ".")
-                    if parts.count >= 1 {
-                        return String(parts[0])
-                    } else {
-                        return ""
-                    }
-                }
-
-                var retVar: String
-
-                if roundedAmount.hasSuffix(".00") {
-                    retVar = "$" + roundedAmount.replacingOccurrences(of: ".00", with: "")
-                } else {
-                    retVar = "$" + roundedAmount
-                }
-
-                var strFollowingDecimal = decimalSubstring(amount: retVar)
-                let strBeforeDecimal = integerSubstring(amount: retVar)
-
-                while strFollowingDecimal.count > 2 && strFollowingDecimal.hasSuffix("0") {
-                    _ = strFollowingDecimal.popLast()
-                }
-
-                return strBeforeDecimal + "." + strFollowingDecimal
-            }
+        if self == 0 {
+            return formattedForMoney()
         }
-        return cleanDollarAmount(amount: currencySymbol + "\(self)", decimals: decimalPlaces)
+
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = decimalPlaces
+
+        if let formattedAmount = formatter.string(from: NSNumber(value: self)) {
+            let isNegative = formattedAmount.hasPrefix("-")
+            let cleanAmount = formattedAmount.replacingOccurrences(of: "-", with: "").trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.").inverted)
+            return (isNegative ? "-$" : "$") + cleanAmount
+        }
+
+        return "\(self)"
     }
 
     /// A utility function that formats a numeric value as a string representing a time interval in hours and minutes.
