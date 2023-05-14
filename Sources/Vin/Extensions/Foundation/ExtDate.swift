@@ -223,6 +223,11 @@ public extension Date {
 
     /// DateFormats is an enumeration representing various date and time formats as string values. It also conforms to CustomStringConvertible to provide a custom string representation for each date format.
     enum DateFormats: String, CustomStringConvertible {
+        
+        
+        /// A string representation of the format "H:mm". Example: 5:00 PM would be "17:00"
+        case militaryTime = "H:mm"
+        
         /// A string representation of the format "h:mm a". Example: "12:00 AM".
         case minimalTime = "h:mm a"
 
