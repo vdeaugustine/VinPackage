@@ -163,10 +163,34 @@ public extension Array where Element: Equatable {
         return indices
     }
 
+    
+    /**
+       Removes all occurrences of the specified element from the collection.
+
+       This function iterates through the collection and removes all instances of the specified element. After the function call, the collection will not contain any instances of the given element.
+
+       - Parameter element: The element to be removed from the collection.
+
+       - Complexity: O(n), where n is the length of the collection.
+    */
     mutating func removeAll(of element: Element) {
         removeAll { $0 == element }
     }
 
+    
+    /**
+       Mutates the collection by either inserting a new element or removing an existing one.
+
+       This function first checks if the element already exists in the collection. If it does, the function removes that element. If the element does not exist, it will try to insert it at the specified index, if provided.
+
+       If the specified index is not within the bounds of the collection or if no index is provided, the function appends the element to the end of the collection.
+
+       - Parameters:
+          - element: The element to be inserted or removed from the collection.
+          - index: The index at which the new element should be inserted, if it is not already present in the collection. Defaults to `nil`, in which case the element is appended to the end of the collection if it doesn't already exist.
+
+       - Complexity: O(n), where n is the length of the collection.
+     */
     mutating func insertOrRemove(element: Element, atIndex index: Int? = nil) {
         if let existingIndex = firstIndex(of: element) {
             remove(at: existingIndex)
