@@ -162,8 +162,22 @@ public extension Array where Element: Equatable {
         }
         return indices
     }
-    
+
     mutating func removeAll(of element: Element) {
         removeAll { $0 == element }
+    }
+
+    mutating func insertOrRemove(element: Element, atIndex index: Int? = nil) {
+        if let existingIndex = firstIndex(of: element) {
+            remove(at: existingIndex)
+        } else {
+            if let index = index,
+               index >= 0,
+               index < count {
+                insert(element, at: index)
+            } else {
+                append(element)
+            }
+        }
     }
 }
