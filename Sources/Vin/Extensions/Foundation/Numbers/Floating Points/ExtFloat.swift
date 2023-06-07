@@ -69,7 +69,7 @@ public extension Float {
 
         if let formattedValue = formatter.string(from: self as NSNumber) {
             let retVal = includeCents ? formattedValue : formattedValue.removeAllAfter(".")
-            return cleanDollarAmount(amount: retVal)
+            return cleanDollarAmount(amount: retVal).replacingOccurrences(of: "¤", with: "")
         }
 
         return "\(self)"
