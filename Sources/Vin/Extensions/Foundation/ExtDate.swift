@@ -154,6 +154,57 @@ public extension Date {
         getFormattedDate(format: format.description, amPMCapitalized: amPMCapitalized)
     }
 
+    /**
+      Converts a string in ISO 8601 format to a Date object.
+
+      ISO 8601 is an international standard for representing dates and times as strings, which includes UTC format.
+
+      - Parameter dateString: The string representation of the date in ISO 8601 format.
+
+      - Returns: A Date object if the string could be successfully parsed, or `nil` if the string was in an incorrect format.
+
+      Example Usage:
+
+      ```swift
+      let dateString = "2023-06-14T12:34:56Z"
+      guard let date = convertToDate(dateString: dateString) else {
+          print("Invalid date string")
+          return
+      }
+      print("The date is \(date)")
+     */
+    static func UTCToDate(_ dateString: String) -> Date? {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        return dateFormatter.date(from: dateString)
+    }
+
+    /// Converts the `Date` instance to a string representation in Coordinated Universal Time (UTC).
+    ///
+    /// The returned string is in ISO 8601 format: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'".
+    /// 'T' is the time delimiter, 'Z' denotes Zulu Time which is equivalent to UTC, and fractional seconds are represented with '.SSS'.
+    /// This format is suitable for representing dates and times in a machine-readable format on an international basis.
+    ///
+    /// - Returns: A string representation of the `Date` in UTC.
+    ///
+    /// Example Usage:
+    ///
+    /// ```swift
+    /// let now = Date()
+    /// print(now.toUTC()) // Prints the current date and time in UTC.
+    /// ```
+    func toUTC() -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = DateFormats.utc.description
+
+        // Set time zone to UTC
+        dateFormat.timeZone = TimeZone(secondsFromGMT: 0)
+
+        return dateFormat.string(from: self)
+    }
+
+
     /// Returns the day of the week, abbreviated to three letters, for a specified number of days before the current date.
     ///
     /// - Parameter daysBack: The number of days before the current date to get the day of the week for.
@@ -223,11 +274,9 @@ public extension Date {
 
     /// DateFormats is an enumeration representing various date and time formats as string values. It also conforms to CustomStringConvertible to provide a custom string representation for each date format.
     enum DateFormats: String, CustomStringConvertible {
-        
-        
         /// A string representation of the format "H:mm". Example: 5:00 PM would be "17:00"
         case militaryTime = "H:mm"
-        
+
         /// A string representation of the format "h:mm a". Example: "12:00 AM".
         case minimalTime = "h:mm a"
 
@@ -251,13 +300,20 @@ public extension Date {
 
         /// A string representation of the format "EEE. MMMM dd, yyyy". Example: "Wed. April 27, 2023".
         case shortWeekdayFullDayMonthYear = "EEE. MMMM dd, yyyy"
-        
+
         /// yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ is an ISO 8601 format string
         /// with milliseconds (SSS) and timezone (ZZZZZ) included for maximum
         ///
         ///     // Example usage:
         ///     let dateString = "2023-04-29T16:15:30.123-07:00"
-        case percise = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        case precise = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+
+        /// A string representation of the UTC (Coordinated Universal Time) format in ISO 8601: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'".
+        /// 'T' is the time delimiter, 'Z' denotes Zulu Time which is equivalent to UTC, and fractional seconds are represented with '.SSS'.
+        /// This format is suitable for representing dates and times in a machine-readable format on an international basis.
+        ///
+        /// Example: "2023-06-13T00:07:02.054Z" represents June 13, 2023, just past midnight (00:07 and 2.054 seconds) in Coordinated Universal Time.
+        case utc = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
         public var description: String { rawValue }
     }

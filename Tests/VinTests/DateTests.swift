@@ -108,4 +108,24 @@ class DateTests: XCTestCase {
         let date = Date(fromString: "02/28/2021")! // February 28, 2021, which is a Sunday
         XCTAssertFalse(Date.isWeekday(date), date.getFormattedDate(format: .shortWeekdayFullDayMonthYear))
     }
+
+    func testUTCToDate() {
+        // Test a valid UTC string
+        let validDateString = "2023-06-13T00:07:02.054Z"
+        let convertedDate = Date.UTCToDate(validDateString)!
+        
+        XCTAssertEqual(convertedDate.toUTC(), validDateString, "Unable to convert back")
+        
+        XCTAssertNotNil(convertedDate, "The date string was not converted correctly")
+
+        // Test an invalid UTC string
+        let invalidDateString = "2023-06-13T:07:02.054Z" // missing hour part
+        XCTAssertNil(Date.UTCToDate(invalidDateString), "Invalid date string was converted")
+        
+        
+        
+        
+    }
+    
+    
 }
