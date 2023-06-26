@@ -22,21 +22,17 @@ public extension Double {
     /// - removeFrontZero: A Boolean value indicating whether to remove leading zeros before the decimal point. Defaults to false.
     /// - Returns: A string representation of the rounded Double value, with optional formatting applied.
     func simpleStr(_ places: Int = 1, _ removeFrontZero: Bool = false) -> String {
-        let rounded = roundTo(places: places)
-        if rounded.truncatingRemainder(dividingBy: 1) == 0 {
-            return String(Int(rounded))
-        } else {
-            if removeFrontZero {
-                let split = String(rounded).components(separatedBy: ".")
-                if let back = split.safeGet(at: 1) {
-                    return "." + back
-                }
-                return String(rounded)
+            let rounded = roundTo(places: places)
+            if rounded >= 1 && rounded.truncatingRemainder(dividingBy: 1) == 0 {
+                return String(Int(rounded))
+            } else {
+                let numberFormatter = NumberFormatter()
+                numberFormatter.minimumFractionDigits = 0
+                numberFormatter.maximumFractionDigits = places
+                let number = NSNumber(value: rounded)
+                return numberFormatter.string(from: number) ?? String(rounded)
             }
-
-            return String(rounded)
         }
-    }
 
     /// A utility public function that formats a numeric value as a currency string with an optional inclusion of cents.
     ///
