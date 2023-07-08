@@ -18,3 +18,15 @@ public extension GridItem {
         (0 ..< amount).map { _ in GridItem(.fixed(size)) }
     }
 }
+
+@available(iOS 13.0, *)
+public extension Binding {
+    func onUpdate(_ closure: @escaping () -> Void) -> Binding<Value> {
+        Binding(get: {
+            wrappedValue
+        }, set: { newValue in
+            wrappedValue = newValue
+            closure()
+        })
+    }
+}
