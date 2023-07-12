@@ -200,4 +200,35 @@ public extension Double {
         }
         return .positional
     }
+    
+    
+    /// Only the necessary units are shown
+    func breakDownTime() -> String {
+        let seconds = self
+        let timeUnits: [(unit: String, seconds: Double)] = [("y", 365 * 24 * 60 * 60),
+                                                            ("mo", 30 * 24 * 60 * 60),
+                                                            ("w", 7 * 24 * 60 * 60),
+                                                            ("d", 24 * 60 * 60),
+                                                            ("h", 60 * 60),
+                                                            ("m", 60),
+                                                            ("s", 1)]
+
+        var remainingSeconds = seconds
+        var timeComponents: [String] = []
+
+        for unit in timeUnits {
+            let value = Int(remainingSeconds / unit.seconds)
+
+            if value > 0 {
+                timeComponents.append("\(value)\(unit.unit)")
+                remainingSeconds -= Double(value) * unit.seconds
+            }
+        }
+
+        if timeComponents.isEmpty {
+            return "0s"
+        } else {
+            return timeComponents.joined(separator: " ")
+        }
+    }
 }
