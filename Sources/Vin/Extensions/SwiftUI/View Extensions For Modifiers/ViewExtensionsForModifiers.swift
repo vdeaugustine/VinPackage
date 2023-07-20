@@ -338,4 +338,24 @@ public extension View {
     func pushTop(alignment: HorizontalAlignment = .center) -> some View {
         modifier(PushTopModifier(alignment: alignment))
     }
+
+    /// Applies horizontal and vertical padding to a view.
+    ///
+    /// Use padding(_ h: CGFloat, _ v: CGFloat) to apply horizontal and vertical padding to the view.
+    ///
+    /// - Parameters:
+    /// - h: The horizontal padding to apply.
+    /// - v: The vertical padding to apply.
+    ///
+    /// - Returns: The modified view.
+    ///
+    /// Example:
+    ///
+    /// Text("Hello, World!")
+    /// .padding(10, 20)
+    ///
+    @available(iOS 13.0, *)
+    func padding(_ h: CGFloat, _ v: CGFloat) -> some View {
+        modifier(PaddingModifier(horizontal: h, vertical: v))
+    }
 }

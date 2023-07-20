@@ -345,4 +345,27 @@ public struct PushTopModifier: ViewModifier {
 
 
 
+// MARK: - PaddingModifier
+
+@available(iOS 13.0, *)
+/// A modifier that applies horizontal and vertical padding to a view.
+public struct PaddingModifier: ViewModifier {
+    /// The horizontal padding to apply.
+    let horizontal: CGFloat
+    /// The vertical padding to apply.
+    let vertical: CGFloat
+
+    /// Applies the specified horizontal and vertical padding to the view.
+    ///
+    /// - Parameter content: The view to modify.
+    /// - Returns: The modified view.
+    public func body(content: Content) -> some View {
+        content
+            .padding(.horizontal, horizontal)
+            .padding(.vertical, vertical)
+    }
+}
+
+
+
 
