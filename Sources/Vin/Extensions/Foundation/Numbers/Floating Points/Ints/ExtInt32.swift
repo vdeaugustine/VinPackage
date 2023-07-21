@@ -55,12 +55,12 @@ public extension Int32 {
     ///
     /// - Returns: A formatted string representation of the numeric value as a currency.
     ///
-    /// This function first creates a Double value from the original integer value self. It then calls the formattedForMoney() method of the Double type to format the value as a currency string.
+    /// This function first creates a Double value from the original integer value self. It then calls the money() method of the Double type to format the value as a currency string.
 
     /// The resulting string is then returned as the result of this function.
-    func formatForMoney() -> String {
+    func money() -> String {
         let dub = Double(self)
-        return dub.formattedForMoney()
+        return dub.money()
     }
 
     /// A computed property that returns a string representation of the numeric value.

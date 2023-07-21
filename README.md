@@ -53,8 +53,8 @@ VinPackage provides extensions and utilities in various categories, including:
 ### Date
 - `secondsFormatted:` formats a given number of seconds into a string representation that includes hours, minutes, and/or seconds
 ### Double
-- `formattedForMoney`: formats a double as a monetary value
-- `formattedForMoneyExtended(decimalPlaces: Int = 4) -> String:` formats a double as a monetary value with an extended decimal format
+- `money`: formats a double as a monetary value
+- `moneyExtended(decimalPlaces: Int = 4) -> String:` formats a double as a monetary value with an extended decimal format
 - `str`: returns a string representation of the double
 - `roundTo(places: Int) -> Double`: rounds the double to the specified number of decimal places
 ### Array

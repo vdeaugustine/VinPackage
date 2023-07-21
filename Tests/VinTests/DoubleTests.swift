@@ -10,62 +10,62 @@ import XCTest
 
 final class DoubleTests: XCTestCase {
     func testPositiveDollarAmount() {
-        let result = 1_234.56.formattedForMoney()
+        let result = 1_234.56.money()
         XCTAssertEqual(result, "$1,234.56")
     }
 
     func testNegativeDollarAmount() {
-        let result = (-1_234.56).formattedForMoney()
+        let result = (-1_234.56).money()
         XCTAssertEqual(result, "-$1,234.56")
     }
 
     func testZeroDollarAmount() {
-        let result = 0.00.formattedForMoney()
+        let result = 0.00.money()
         XCTAssertEqual(result, "$0")
     }
 
     func testTrimZeroCents() {
-        let result = 1_234.00.formattedForMoney(trimZeroCents: true)
+        let result = 1_234.00.money(trimZeroCents: true)
         XCTAssertEqual(result, "$1,234")
     }
 
     func testNoCentsIncluded() {
-        let result = 1_234.56.formattedForMoney(includeCents: false)
+        let result = 1_234.56.money(includeCents: false)
         XCTAssertEqual(result, "$1,234")
     }
 
     func testNegativeNoCentsIncluded() {
-        let result = (-1_234.56).formattedForMoney(includeCents: false)
+        let result = (-1_234.56).money(includeCents: false)
         XCTAssertEqual(result, "-$1,234")
     }
 
     func testPositiveDollarAmountExtended() {
-        let result = 1_234.56789.formattedForMoneyExtended()
+        let result = 1_234.56789.moneyExtended()
         XCTAssertEqual(result, "$1,234.5679")
     }
 
     func testNegativeDollarAmountExtended() {
-        let result = (-1_234.56789).formattedForMoneyExtended()
+        let result = (-1_234.56789).moneyExtended()
         XCTAssertEqual(result, "-$1,234.5679")
     }
 
     func testZeroDollarAmountExtended() {
-        let result = 0.00.formattedForMoneyExtended()
+        let result = 0.00.moneyExtended()
         XCTAssertEqual(result, "$0")
     }
 
     func testPositiveDollarAmountWithDecimalPlacesExtended() {
-        let result = 1_234.5678912345.formattedForMoneyExtended(decimalPlaces: 8)
+        let result = 1_234.5678912345.moneyExtended(decimalPlaces: 8)
         XCTAssertEqual(result, "$1,234.56789123")
     }
 
     func testNegativeDollarAmountWithDecimalPlacesExtended() {
-        let result = (-1_234.5678912345).formattedForMoneyExtended(decimalPlaces: 8)
+        let result = (-1_234.5678912345).moneyExtended(decimalPlaces: 8)
         XCTAssertEqual(result, "-$1,234.56789123")
     }
 
     func testZeroDollarAmountWithDecimalPlacesExtended() {
-        let result = 0.00.formattedForMoneyExtended(decimalPlaces: 8)
+        let result = 0.00.moneyExtended(decimalPlaces: 8)
         XCTAssertEqual(result, "$0")
     }
     

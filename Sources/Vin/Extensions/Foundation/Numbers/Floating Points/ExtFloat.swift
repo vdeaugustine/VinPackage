@@ -51,7 +51,7 @@ public extension Float {
     /// The formatted string is then cleaned up and returned by the cleanDollarAmount function, which removes any leading or trailing dollar signs and formats any .00 cents amounts as whole dollar amounts. The cleaned string is then returned as the result of this function.
 
     /// If the numeric value cannot be formatted using the NumberFormatter class, this function returns the original value as a string.
-    func formattedForMoney(includeCents: Bool = true) -> String {
+    func money(includeCents: Bool = true) -> String {
         func cleanDollarAmount(amount: String) -> String {
             let dollarAmount = amount.trimmingCharacters(in: ["$"])
             if dollarAmount.isEmpty {
@@ -88,7 +88,7 @@ public extension Float {
     /// If amount is empty, this function returns an empty string. Otherwise, it formats the value with up to 11 decimal places and rounds the value to the nearest cent. If the resulting value ends with ".00", this function removes the decimal point and trailing zeroes.
 
     /// The resulting string is then returned as the result of this function.
-    func formattedForMoneyExtended(decimalPlaces: Int = 4) -> String {
+    func moneyExtended(decimalPlaces: Int = 4) -> String {
         guard let currencySymbol = Locale.current.currencySymbol,
               let unicodeScalar = Unicode.Scalar(currencySymbol.unicodeScalars.first?.value ?? 36) else { return "" }
         func cleanDollarAmount(amount: String, decimals: Int) -> String {
