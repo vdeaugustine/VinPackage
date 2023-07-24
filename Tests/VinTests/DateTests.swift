@@ -113,19 +113,37 @@ class DateTests: XCTestCase {
         // Test a valid UTC string
         let validDateString = "2023-06-13T00:07:02.054Z"
         let convertedDate = Date.UTCToDate(validDateString)!
-        
+
         XCTAssertEqual(convertedDate.toUTC(), validDateString, "Unable to convert back")
-        
+
         XCTAssertNotNil(convertedDate, "The date string was not converted correctly")
 
         // Test an invalid UTC string
         let invalidDateString = "2023-06-13T:07:02.054Z" // missing hour part
         XCTAssertNil(Date.UTCToDate(invalidDateString), "Invalid date string was converted")
-        
-        
-        
-        
+    }
+
+    func testTimeRangeString_sameDay() {
+        let startTime = Date.getThisTime(hour: 4, minute: 0)! // July 25, 2023, at 4:00 AM
+        let endTime = Date.getThisTime(hour: 16, minute: 0)! // July 25, 2023, at 4:00 PM
+
+        let result = Date.timeRangeString(start: startTime, end: endTime)
+        XCTAssertEqual(result, "4:00 AM - 4:00 PM", "Expected time range format to be without AM/PM for start time when both dates are within the same day.")
     }
     
-    
+    func testTimeRangeString_sameDaySamePeriod() {
+        let startTime = Date.getThisTime(hour: 4, minute: 0)! // July 25, 2023, at 4:00 AM
+        let endTime = Date.getThisTime(hour: 6, minute: 0)! // July 25, 2023, at 4:00 PM
+
+        let result = Date.timeRangeString(start: startTime, end: endTime)
+        XCTAssertEqual(result, "4:00 - 6:00 AM", "Expected time range format to be without AM/PM for start time when both dates are within the same day.")
+    }
+
+    func testTimeRangeString_differentDays() {
+        let startTime = Date.getThisTime(hour: 4, minute: 0)! // July 25, 2023, at 4:00 AM
+        let endTime = Date.getThisTime(hour: 4, minute: 0)!.addDays(3) // July 27, 2023, at 4:00 AM
+
+        let result = Date.timeRangeString(start: startTime, end: endTime)
+        XCTAssertEqual(result, "4:00 AM - 4:00 AM", "Expected time range format to be with AM/PM for start time when dates are on different days.")
+    }
 }

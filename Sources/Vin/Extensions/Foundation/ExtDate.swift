@@ -204,7 +204,6 @@ public extension Date {
         return dateFormat.string(from: self)
     }
 
-
     /// Returns the day of the week, abbreviated to three letters, for a specified number of days before the current date.
     ///
     /// - Parameter daysBack: The number of days before the current date to get the day of the week for.
@@ -401,5 +400,74 @@ public extension Date {
             return nil
         }
         self = date
+    }
+
+    /**
+       Checks if two given dates are both within either the AM or PM period of the same day.
+
+       This function checks if two `Date` objects fall within the same AM or PM period of the same calendar day. The function first checks if the dates belong to the same day. If they do, it then verifies if both dates fall within the same period (AM or PM). Hours from 0 to 11 are considered AM, and hours from 12 to 23 are considered PM.
+
+       - Parameters:
+          - date1: The first `Date` to check.
+          - date2: The second `Date` to check.
+
+       - Returns: Returns `true` if both dates fall within the same AM or PM period of the same day. Returns `false` otherwise.
+
+       # Example
+       ```swift
+       let date1 = Date()
+       let date2 = Calendar.current.date(byAdding: .hour, value: 3, to: date1)!
+       let isSamePeriod = isSameDayAndPeriod(date1: date1, date2: date2)
+       ```
+
+       - Author: Your Name
+       - Version: 1.0
+     */
+    static func isSameDayAndPeriod(date1: Date, date2: Date) -> Bool {
+        let calendar = Calendar.current
+        let hour1 = calendar.component(.hour, from: date1)
+        let hour2 = calendar.component(.hour, from: date2)
+
+        let day1 = calendar.component(.day, from: date1)
+        let day2 = calendar.component(.day, from: date2)
+
+        // Check if they are the same day
+        guard day1 == day2 else {
+            return false
+        }
+
+        // Hours from 0 to 11 are AM, and from 12 to 23 are PM.
+        let isAM1 = hour1 < 12
+        let isAM2 = hour2 < 12
+
+        return isAM1 == isAM2
+    }
+
+    /**
+     Generates a formatted string that represents a range between two `Date` objects.
+
+     The resulting string uses the 12-hour clock time format including the period (AM/PM) when the start and end dates fall on different days or different periods of the same day (AM/PM). If the start and end dates are within the same day and period, the resulting string will use a 24-hour clock time format without including the period (AM/PM).
+
+     This function depends on the `isSameDayAndPeriod(date1:date2:)` method to determine if the two dates are within the same day and period and the `getFormattedDate(format:)` method to format each date into a string.
+
+     - Parameter start: The start `Date` of the range.
+     - Parameter end: The end `Date` of the range.
+
+     - Returns: A formatted string that represents the time range, in the format of "hh:mm - hh:mm" or "hh:mm a - hh:mm a", depending on whether the start and end dates fall within the same day and period.
+
+     ## Example
+     ```swift
+     let startTime = Date(timeIntervalSince1970: 1627200000) // July 25, 2023, at 4:00 AM
+     let endTime = Date(timeIntervalSince1970: 1627243200) // July 25, 2023, at 4:00 PM
+     let rangeString = timeRangeString(start: startTime, end: endTime)
+     // Prints "4:00 AM - 4:00 PM"
+     */
+    static func timeRangeString(start: Date, end: Date) -> String {
+        let firstStringFormat = isSameDayAndPeriod(date1: start, date2: end) ? "h:mm" : "h:mm a"
+
+        let firstString = start.getFormattedDate(format: firstStringFormat)
+        let secondString = end.getFormattedDate(format: .minimalTime)
+
+        return "\(firstString) - \(secondString)"
     }
 }
