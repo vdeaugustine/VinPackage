@@ -280,7 +280,7 @@ public extension Date {
         case minimalTime = "h:mm a"
 
         /// A string representation of the format "MMM d, yyyy". Example: "Jul 22, 2020".
-        case abreviatedMonth = "MMM d, yyyy"
+        case abbreviatedMonth = "MMM d, yyyy"
 
         /// A string representation of the format "MMM d". Example: "Jul 22".
         case monthDay = "MMM d"
