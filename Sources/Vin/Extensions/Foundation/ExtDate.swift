@@ -131,17 +131,17 @@ public extension Date {
 
     func getFormattedDate(format: String, amPMCapitalized: Bool = true) -> String {
         // Create a DateFormatter object to format the date.
-        let dateformat = DateFormatter()
+        let dateFormat = DateFormatter()
 
         // Set the date format based on the input parameter.
-        dateformat.dateFormat = format
+        dateFormat.dateFormat = format
 
         // Set the AM/PM symbol based on the input parameter.
-        dateformat.amSymbol = amPMCapitalized ? "AM" : "am"
-        dateformat.pmSymbol = amPMCapitalized ? "PM" : "pm"
+        dateFormat.amSymbol = amPMCapitalized ? "AM" : "am"
+        dateFormat.pmSymbol = amPMCapitalized ? "PM" : "pm"
 
         // Use the date formatter to convert the date to a string using the specified format.
-        return dateformat.string(from: self)
+        return dateFormat.string(from: self)
     }
 
     /// Returns a formatted string representation of the date using the specified format.
@@ -292,7 +292,7 @@ public extension Date {
         case slashDateZeros = "MM/d/yyyy"
 
         /// A string representation of the format "MMM d, yyyy h:mm a". Example: "Jul 22, 2020 12:00 AM".
-        case abreviatedMonthAndMinimalTime = "MMM d, yyyy h:mm a"
+        case abbreviatedMonthAndMinimalTime = "MMM d, yyyy h:mm a"
 
         /// A string representation of the format "MM/dd/yyyy HH:mm:ss". Example: "07/22/2020 00:00:00".
         case all = "MM/dd/yyyy HH:mm:ss"
