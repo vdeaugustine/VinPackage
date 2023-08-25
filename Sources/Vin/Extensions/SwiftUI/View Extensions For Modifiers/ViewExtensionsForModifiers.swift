@@ -358,4 +358,30 @@ public extension View {
     func padding(_ h: CGFloat, _ v: CGFloat) -> some View {
         modifier(PaddingModifier(horizontal: h, vertical: v))
     }
+
+    /// Conditionally applies the `searchable` modifier based on the given `isSearching` flag.
+    ///
+    /// If `isSearching` is set to `true`, the view will be made searchable. Otherwise, the view remains unmodified.
+    ///
+    /// - Parameters:
+    ///   - isSearching: Indicates whether the content should be made searchable.
+    ///   - searchText: A binding to the text that's being used for search.
+    ///
+    /// - Returns: A view that's either searchable or unmodified based on the `isSearching` flag.
+    ///
+    /// - Example Usage:
+    ///
+    /// ```
+    /// VStack {
+    ///     Text("Hello World")
+    /// }
+    /// .conditionallySearchable(isSearching: isCurrentlySearching, searchText: $currentSearchText)
+    /// ```
+    ///
+    /// - Requires: iOS 15.0 and above.
+    /// - SeeAlso: `SearchableIfSearching` for the underlying modifier.
+    @available(iOS 15.0, *)
+    func conditionallySearchable(isSearching: Bool, searchText: Binding<String>) -> some View {
+        modifier(SearchableIfSearching(isSearching: isSearching, searchText: searchText))
+    }
 }

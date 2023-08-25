@@ -366,6 +366,52 @@ public struct PaddingModifier: ViewModifier {
     }
 }
 
+/// A `ViewModifier` that conditionally applies the `searchable` modifier based on the `isSearching` flag.
+///
+/// If `isSearching` is set to `true`, the view content will be made searchable. Otherwise, it will remain unmodified.
+///
+/// This is particularly useful when you only want to make a view searchable under certain conditions.
+///
+/// - Requires: iOS 15.0 and above.
+///
+/// - Example Usage:
+///
+/// ```
+/// VStack {
+///     Text("Hello World")
+/// }
+/// .modifier(SearchableIfSearching(isSearching: isCurrentlySearching, searchText: $currentSearchText))
+/// ```
+///
+/// - SeeAlso: `searchable(_:suggestion:)` method in the `View` protocol.
+@available(iOS 15.0, *)
+public struct SearchableIfSearching: ViewModifier {
+
+    /// Indicates whether the content should be made searchable.
+    let isSearching: Bool
+    
+    /// A binding to the text that's being used for search.
+    ///
+    /// Changes to this binding will be reflected immediately in the view's search functionality.
+    @Binding var searchText: String
+
+    /// Produces the modified or unmodified content view based on the `isSearching` flag.
+    ///
+    /// - Parameter content: The original content that this modifier is applied to.
+    ///
+    /// - Returns: A view that's either searchable or unmodified based on the `isSearching` flag.
+    @ViewBuilder
+    public func body(content: Content) -> some View {
+        if isSearching {
+            content
+                .searchable(text: $searchText)
+        } else {
+            content
+        }
+    }
+}
+
+
 
 
 
