@@ -8,6 +8,25 @@
 import Foundation
 
 public extension String {
+    /// Removes all occurrences of a specified substring from the string.
+    ///
+    /// Use this method to remove all instances of a substring from the calling string. This method returns a new string, leaving the original string unchanged.
+    ///
+    /// - Parameter substring: The substring to remove from the string.
+    ///
+    /// - Returns: A new string with all occurrences of the specified substring removed.
+    ///
+    /// # Example
+    /// ```swift
+    /// let originalString = "Hello, world! Have a world-class day!"
+    /// let modifiedString = originalString.removingAllOccurrences(of: "world")
+    /// print(modifiedString)
+    /// // Output: "Hello, ! Have a -class day!"
+    /// ```
+    func removingAllOccurrences(of substring: String) -> String {
+        replacingOccurrences(of: substring, with: "")
+    }
+
     /// A utility function that removes all characters after the specified character in a string.
     ///
     /// - Parameter character: The character after which all characters should be removed.
