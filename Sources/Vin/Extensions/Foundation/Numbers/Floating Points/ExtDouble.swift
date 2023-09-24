@@ -16,23 +16,39 @@ public extension Double {
         return (self * divisor).rounded() / divisor
     }
 
-    /// Returns a string representation of a rounded Double value, with options to remove trailing zeros and/or leading zeros before the decimal point.
+    /// Returns a string representation of the current number, rounded to the specified number of decimal places.
+    ///
+    /// This function provides a flexible way to format numbers into strings with options to control the number of decimal places, whether to use commas as thousands separators, and whether to remove leading zeros for numbers between 0 and 1.
+    ///
     /// - Parameters:
-    /// - places: The number of decimal places to round to. Defaults to 1.
-    /// - removeFrontZero: A Boolean value indicating whether to remove leading zeros before the decimal point. Defaults to false.
-    /// - Returns: A string representation of the rounded Double value, with optional formatting applied.
-    func simpleStr(_ places: Int = 1, _ removeFrontZero: Bool = false) -> String {
-            let rounded = roundTo(places: places)
-            if rounded >= 1 && rounded.truncatingRemainder(dividingBy: 1) == 0 {
-                return String(Int(rounded))
-            } else {
-                let numberFormatter = NumberFormatter()
-                numberFormatter.minimumFractionDigits = 0
-                numberFormatter.maximumFractionDigits = places
-                let number = NSNumber(value: rounded)
-                return numberFormatter.string(from: number) ?? String(rounded)
-            }
+    ///   - places: The number of decimal places to which the number should be rounded. Defaults to `1`.
+    ///   - removeFrontZero: If `true`, removes the leading zero for numbers between 0 and 1. This parameter is currently not used in the function and may be considered for future enhancements.
+    ///   - useCommas: If `true`, formats the number using commas as thousands separators. Defaults to `false`.
+    ///
+    /// - Returns: A string representation of the number, formatted according to the specified parameters.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let number: Double = 1234.5678
+    ///   print(number.simpleStr(2, useCommas: true))  // "1,234.57"
+    ///   ```
+    func simpleStr(_ places: Int = 1, _ removeFrontZero: Bool = false, useCommas: Bool = false) -> String {
+        let rounded = roundTo(places: places)
+
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 0
+        numberFormatter.maximumFractionDigits = places
+        if useCommas {
+            numberFormatter.numberStyle = .decimal
         }
+
+        if rounded >= 1 && rounded.truncatingRemainder(dividingBy: 1) == 0 && !useCommas {
+            return String(Int(rounded))
+        } else {
+            let number = NSNumber(value: rounded)
+            return numberFormatter.string(from: number) ?? String(rounded)
+        }
+    }
 
     /// A utility public function that formats a numeric value as a currency string with an optional inclusion of cents.
     ///
@@ -200,8 +216,7 @@ public extension Double {
         }
         return .positional
     }
-    
-    
+
     /// Only the necessary units are shown
     func breakDownTime() -> String {
         let seconds = self

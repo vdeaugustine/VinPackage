@@ -73,4 +73,23 @@ public extension Int {
     var str: String {
         "\(self)"
     }
+    
+    /// Returns a string representation of the current number, giving the option to include commas to separate thousands.
+    ///
+    /// This function provides a flexible way to format numbers into strings with option whether to use commas as thousands separators.
+    ///
+    /// - Parameters:
+    ///   - useCommas: If `true`, formats the number using commas as thousands separators. Defaults to `false`.
+    ///
+    /// - Returns: A string representation of the number, formatted according to the specified parameter.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let number: Int = 12_345_678
+    ///   print(number.simpleStr(useCommas: true))  // "123,457"
+    ///   ```
+    func simpleStr(useCommas: Bool = false) -> String {
+        let doubleVersionOfInt = Double(self)
+        return doubleVersionOfInt.simpleStr(useCommas: useCommas)
+    }
 }
