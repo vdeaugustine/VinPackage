@@ -470,4 +470,74 @@ public extension Date {
 
         return "\(firstString) - \(secondString)"
     }
+
+    /**
+     An extension on `Date` that provides a method to apply the time components from another date object, with a specified granularity.
+
+     ## Overview
+
+     This extension adds a method to the `Date` type, allowing developers to create a new `Date` instance by combining the date components of the receiver with the time components from another `Date` object. You can specify the granularity of the time components to be applied.
+
+     - Parameters:
+       - otherDate: The `Date` object from which to extract the time components.
+       - granularity: An array of `Calendar.Component` that specifies the granularity of the time components to be applied from `otherDate`. The default value is `[.hour, .minute]`.
+
+     - Returns: A new `Date` object with the date components of the receiver and the time components from `otherDate`, according to the specified granularity. If the merging of components fails, it returns `nil`.
+
+     ## Example
+
+     ```swift
+     let date1 = Calendar.current.date(from: DateComponents(year: 2023, month: 9, day: 26))!
+     let date2 = Calendar.current.date(from: DateComponents(hour: 14, minute: 30))!
+
+     if let mergedDate = date1.applyingTime(from: date2) {
+         print(mergedDate) // prints "2023-09-26 14:30:00 +0000"
+     }
+     ```
+     Discussion
+     This method uses the current calendar to extract date and time components. The date components are extracted from the receiver, and the time components are extracted from otherDate with the specified granularity. These components are then merged to create a new Date object.
+
+     The granularity parameter allows you to specify which time components you want to apply from otherDate. For example, if you pass [.hour, .minute, .second] for granularity, the resulting date will have the hour, minute, and second from otherDate, and the year, month, and day from the receiver.
+
+     When using this method, consider the possible outcomes if the creation of the new Date instance fails due to the inability to merge components and handle them appropriately in your code.
+
+     Note: The applyingTime(from:withGranularity:) method does not account for daylight saving time adjustments and may result in unexpected behaviors around the transitions.
+
+     Warning: Ensure that the otherDate parameter is a valid date object with the required time components specified in the granularity, as the method does not validate the existence of the components in otherDate.
+
+     */
+
+    func applyingTime(from otherDate: Date, withGranularity granularity: [Calendar.Component] = [.hour, .minute]) -> Date? {
+        let calendar = Calendar.current
+
+        // Extract the time components from the other date
+        let timeComponents = calendar.dateComponents(Set(granularity), from: otherDate)
+
+        // Extract the date components from the current date
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: self)
+
+        // Merge the two sets of components
+        var mergedComponents = DateComponents()
+        mergedComponents.year = dateComponents.year
+        mergedComponents.month = dateComponents.month
+        mergedComponents.day = dateComponents.day
+
+        for component in granularity {
+            switch component {
+                case .hour:
+                    mergedComponents.hour = timeComponents.hour
+                case .minute:
+                    mergedComponents.minute = timeComponents.minute
+                case .second:
+                    mergedComponents.second = timeComponents.second
+                case .nanosecond:
+                    mergedComponents.nanosecond = timeComponents.nanosecond
+                default:
+                    continue
+            }
+        }
+
+        // Create a new date from the merged components
+        return calendar.date(from: mergedComponents)
+    }
 }
