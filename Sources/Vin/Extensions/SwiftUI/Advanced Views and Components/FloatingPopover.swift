@@ -8,25 +8,55 @@
 import Foundation
 import SwiftUI
 
-/// - Enabling Popover for iOS
+
 @available(iOS 15.0, *)
 extension View{
+    /// A SwiftUI view modifier to add popover presentation functionality to the SwiftUI `View`.
+    ///
+    /// Utilizing this extension allows a popover to be presented, customized with the specified arrow directions, and contain SwiftUI `View` content.
+    ///
+    /// Example Usage:
+    ///
+    /// ```swift
+    /// struct ContentView: View {
+    ///     @State private var isPopoverPresented = false
+    ///
+    ///     var body: some View {
+    ///         Button("Show Popover") {
+    ///             isPopoverPresented.toggle()
+    ///         }
+    ///         .floatingPopover(isPresented: $isPopoverPresented,
+    ///                          arrowDirection: .up) {
+    ///             Text("Hello, Popover!")
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
     @ViewBuilder
-    func popover<Content: View>(isPresented: Binding<Bool>,
+    func floatingPopover<Content: View>(isPresented: Binding<Bool>,
                                 arrowDirection: UIPopoverArrowDirection,
                                 @ViewBuilder content: @escaping () -> Content)
         -> some View {
         background {
-            PopOverController(isPresented: isPresented, arrowDirection: arrowDirection, content: content())
+            FloatingPopOverController(isPresented: isPresented, arrowDirection: arrowDirection, content: content())
         }
     }
 }
 
 // MARK: - PopOverController
 
-/// - Popover Helper
+/// Popover Helper
+///
+/// `FloatingPopOverController` is a helper structure that wraps a SwiftUI view and presents it using UIKit's popover presentation mechanics.
+///
+/// It adheres to `UIViewControllerRepresentable` protocol to bridge between SwiftUI and UIKit, presenting SwiftUI views within UIKit's popover.
+/// The presented content can be customized to update with SwiftUI state and interactions.
+///
+/// - Important: This component is fileprivate and designed to be used internally through `View` extensions.
+///
 @available(iOS 15.0, *)
-fileprivate struct PopOverController<Content: View>: UIViewControllerRepresentable {
+fileprivate struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     var arrowDirection: UIPopoverArrowDirection
     var content: Content
@@ -73,10 +103,16 @@ fileprivate struct PopOverController<Content: View>: UIViewControllerRepresentab
         }
     }
 
-    /// - Forcing it to show Popover using PresentationDelegate
+    
+    /// Forcing it to show Popover using PresentationDelegate
+    ///
+    /// `Coordinator` is a delegate adhering to `UIPopoverPresentationControllerDelegate`, ensuring to manage the presentation style and dismissal updates.
+    ///
+    /// It enforces the popover to always display as a popover (not adapting for compact size classes), and monitors the dismissal of the popover to update the SwiftUI state binding (`isPresented`).
+    ///
     class Coordinator: NSObject, UIPopoverPresentationControllerDelegate{
-        var parent: PopOverController
-        init(parent: PopOverController) {
+        var parent: FloatingPopOverController
+        init(parent: FloatingPopOverController) {
             self.parent = parent
         }
 
@@ -94,8 +130,14 @@ fileprivate struct PopOverController<Content: View>: UIViewControllerRepresentab
 
 // MARK: - CustomHostingView
 
+/// Custom Hosting Controller for Wrapping to it's SwiftUI View Size
+///
+/// `CustomHostingView` is a specialized `UIHostingController` designed to adjust the preferred content size based on intrinsic content size, ensuring SwiftUI views size accurately within UIKit's hosting environment.
+///
+/// - Note: This class will adhere to the sizing behaviors of SwiftUI views and utilize the `intrinsicContentSize` to determine the `preferredContentSize` utilized by UIKit's popover presentation mechanics.
+///
 @available(iOS 15.0, *)
-/// - Custom Hosting Controller for Wrapping to it's SwiftUI View Size
+
 fileprivate class CustomHostingView<Content: View>: UIHostingController<Content>{
     override func viewDidLoad() {
         super.viewDidLoad()
