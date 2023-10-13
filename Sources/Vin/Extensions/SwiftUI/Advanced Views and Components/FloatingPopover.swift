@@ -10,7 +10,7 @@ import SwiftUI
 
 
 @available(iOS 15.0, *)
-extension View{
+public extension View{
     /// A SwiftUI view modifier to add popover presentation functionality to the SwiftUI `View`.
     ///
     /// Utilizing this extension allows a popover to be presented, customized with the specified arrow directions, and contain SwiftUI `View` content.
