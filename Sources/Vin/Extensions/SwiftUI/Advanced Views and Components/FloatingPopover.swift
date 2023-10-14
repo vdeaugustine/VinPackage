@@ -8,9 +8,8 @@
 import Foundation
 import SwiftUI
 
-
 @available(iOS 15.0, *)
-public extension View{
+public extension View {
     /// A SwiftUI view modifier to add popover presentation functionality to the SwiftUI `View`.
     ///
     /// Utilizing this extension allows a popover to be presented, customized with the specified arrow directions, and contain SwiftUI `View` content.
@@ -35,8 +34,8 @@ public extension View{
     ///
     @ViewBuilder
     func floatingPopover<Content: View>(isPresented: Binding<Bool>,
-                                arrowDirection: UIPopoverArrowDirection,
-                                @ViewBuilder content: @escaping () -> Content)
+                                        arrowDirection: UIPopoverArrowDirection,
+                                        @ViewBuilder content: @escaping () -> Content)
         -> some View {
         background {
             FloatingPopOverController(isPresented: isPresented, arrowDirection: arrowDirection, content: content())
@@ -44,7 +43,7 @@ public extension View{
     }
 }
 
-// MARK: - PopOverController
+// MARK: - FloatingPopOverController
 
 /// Popover Helper
 ///
@@ -56,7 +55,7 @@ public extension View{
 /// - Important: This component is fileprivate and designed to be used internally through `View` extensions.
 ///
 @available(iOS 15.0, *)
-fileprivate struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
+struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     var arrowDirection: UIPopoverArrowDirection
     var content: Content
@@ -86,7 +85,7 @@ fileprivate struct FloatingPopOverController<Content: View>: UIViewControllerRep
                 //    hostingController.preferredContentSize = hostingController.view.intrinsicContentSize
                 // }
             }
-        }else{
+        } else {
             if isPresented{
                 /// - Presenting Popover
                 let controller = CustomHostingView(rootView: content)
@@ -103,14 +102,13 @@ fileprivate struct FloatingPopOverController<Content: View>: UIViewControllerRep
         }
     }
 
-    
     /// Forcing it to show Popover using PresentationDelegate
     ///
     /// `Coordinator` is a delegate adhering to `UIPopoverPresentationControllerDelegate`, ensuring to manage the presentation style and dismissal updates.
     ///
     /// It enforces the popover to always display as a popover (not adapting for compact size classes), and monitors the dismissal of the popover to update the SwiftUI state binding (`isPresented`).
     ///
-    class Coordinator: NSObject, UIPopoverPresentationControllerDelegate{
+    class Coordinator: NSObject, UIPopoverPresentationControllerDelegate {
         var parent: FloatingPopOverController
         init(parent: FloatingPopOverController) {
             self.parent = parent
