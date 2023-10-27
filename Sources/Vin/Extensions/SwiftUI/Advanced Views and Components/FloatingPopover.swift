@@ -35,10 +35,11 @@ public extension View {
     @ViewBuilder
     func floatingPopover<Content: View>(isPresented: Binding<Bool>,
                                         arrowDirection: UIPopoverArrowDirection,
-                                        @ViewBuilder content: @escaping () -> Content)
+                                        _ onDismiss: (() -> Void)? = nil,
+                                        @ViewBuilder _ content: @escaping () -> Content)
         -> some View {
         background {
-            FloatingPopOverController(isPresented: isPresented, arrowDirection: arrowDirection, content: content())
+            FloatingPopOverController(isPresented: isPresented, arrowDirection: arrowDirection, onDismiss: onDismiss, content: content())
         }
     }
 }
@@ -58,7 +59,9 @@ public extension View {
 struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     var arrowDirection: UIPopoverArrowDirection
+    var onDismiss: (() -> Void)? = nil
     var content: Content
+
     func makeCoordinator() -> Coordinator {
         return Coordinator(parent: self)
     }
@@ -75,6 +78,7 @@ struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
             if !isPresented {
                 /// - Closing Popover
                 uiViewController.dismiss(animated: true)
+                onDismiss?()
             } else {
                 hostingController.rootView = content
                 /// - Updating View Size when it's Update
