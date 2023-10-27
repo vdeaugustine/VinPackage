@@ -35,7 +35,7 @@ public extension View {
     @ViewBuilder
     func floatingPopover<Content: View>(isPresented: Binding<Bool>,
                                         arrowDirection: UIPopoverArrowDirection,
-                                        _ onDismiss: (() -> Void)? = nil,
+                                        onDismiss: (() -> Void)? = nil,
                                         @ViewBuilder _ content: @escaping () -> Content)
         -> some View {
         background {
