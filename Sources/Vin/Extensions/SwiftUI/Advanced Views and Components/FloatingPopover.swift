@@ -59,6 +59,7 @@ public extension View {
 struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     var arrowDirection: UIPopoverArrowDirection
+    var backgroundColorHex: Color? = nil
     var onDismiss: (() -> Void)? = nil
     var content: Content
 
@@ -68,6 +69,7 @@ struct FloatingPopOverController<Content: View>: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> UIViewController {
         let controller = UIViewController()
+//        if let backgroundColor = backgroundColorHex?.resolve(in: <#T##EnvironmentValues#>)
         controller.view.backgroundColor = .clear
         return controller
     }

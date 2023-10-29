@@ -50,6 +50,11 @@ public extension Color {
                       Int(blue * 255),
                       Int(alpha * 255))
     }
+    
+    @available(iOS 14.0, *)
+    var uiColor: UIColor {
+        UIColor(hex: self.hex)
+    }
 
     /// A static property of the Color type that generates a random color.
     ///
@@ -60,38 +65,6 @@ public extension Color {
     /// The resulting Color object is then returned as the result of this property.
     static var random: Color {
         Color(red: .random(in: 0 ... 255) / 255, green: .random(in: 0 ... 255) / 255, blue: .random(in: 0 ... 255) / 255)
-    }
-
-    /// Converts a hexadecimal color string into a UIColor object.
-    ///
-    /// - Parameter hex: The hexadecimal color string to convert.
-    /// - Returns: A UIColor object representing the specified color.
-    static func hexStringToUIColor(hex: String) -> UIColor {
-        var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-
-        if cString.hasPrefix("#") {
-            cString.remove(at: cString.startIndex)
-        }
-
-        if (cString.count) != 6 {
-            return UIColor.gray
-        }
-
-        var rgbValue: UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-
-        return UIColor(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-                       green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-                       blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-                       alpha: CGFloat(1.0))
-    }
-
-    /// Converts a hexadecimal color string into a SwiftUI Color.
-    ///
-    /// - Parameter hex: The hexadecimal color string to convert.
-    /// - Returns: A Color object representing the specified color.
-    static func hexStringToColor(hex: String) -> Color {
-        Color(hexStringToUIColor(hex: hex))
     }
 
     /// The same background color as a SwiftUI list 
