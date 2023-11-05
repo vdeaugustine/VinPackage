@@ -1,13 +1,13 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Vincent DeAugustine on 11/4/23.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 // MARK: - TransformingTextField
 
@@ -25,16 +25,16 @@ import Combine
 public struct TransformingTextField: View {
     /// The title key for the text field, used as a label.
     var titleKey: String
-    
+
     /// A binding to the text input from the parent view.
     @Binding var text: String
-    
+
     /// An optional limit to the number of characters that can be input.
     var characterLimit: Int?
-    
+
     /// The object that manages the transformation of the text.
     @StateObject private var textTransformer: TextTransformer
-    
+
     /// Initializes a `TransformingTextField` with a title, text binding, optional character limit, and a transformation closure.
     ///
     /// - Parameters:
@@ -43,15 +43,15 @@ public struct TransformingTextField: View {
     ///   - characterLimit: An optional integer specifying the maximum number of characters allowed.
     ///   - transformer: A closure that takes a string as its input and returns a transformed string.
     public init(_ titleKey: String,
-         text: Binding<String>,
-         characterLimit: Int? = nil,
-         _ transformer: @escaping (String) -> String) {
+                text: Binding<String>,
+                characterLimit: Int? = nil,
+                _ transformer: @escaping (String) -> String) {
         self._text = text
         self.titleKey = titleKey
         self._textTransformer = StateObject(wrappedValue: TextTransformer(transformer: transformer,
                                                                           characterLimit: characterLimit))
     }
-    
+
     /// The content and behavior of the view.
     public var body: some View {
         TextField(titleKey,
@@ -59,23 +59,35 @@ public struct TransformingTextField: View {
                                 set: { self.textTransformer.updateText($0) }))
     }
     
+    public static let transformForMoney: (String) -> String = { input in
+        var result = ""
+        let filtered = input.filter { "0123456789".contains($0) }
+        guard let dub = Double(filtered) else { return result }
+        let divided = dub / 100
+        // Assuming 'money' function is defined elsewhere to format the string as money
+        let str = divided.money()
+        for character in str {
+            result.append(character)
+        }
+        return result
+    }
+
     // MARK: - TextTransformer
-    
+
     /// A class that observes and transforms text input, limiting the number of characters if a limit is set.
     fileprivate class TextTransformer: ObservableObject {
-        
         /// The text that has been transformed by the `transformer` closure.
         @Published var transformedText: String = ""
-        
+
         /// The closure that defines how the text should be transformed.
         let transformer: (String) -> String
-        
+
         /// The optional maximum number of characters allowed in the text.
         let characterLimit: Int?
-        
+
         /// A set of any type that conforms to the `Cancellable` protocol, used to cancel the publisher when no longer needed.
         private var cancellables = Set<AnyCancellable>()
-        
+
         /// Initializes a `TextTransformer` with a transformation closure and an optional character limit.
         ///
         /// - Parameters:
@@ -93,7 +105,7 @@ public struct TransformingTextField: View {
                 }
                 .store(in: &cancellables)
         }
-        
+
         /// Updates the `transformedText` property with the new text after applying the transformation.
         /// If a character limit is set, it will not update the text if the new text exceeds the limit.
         ///
@@ -104,19 +116,5 @@ public struct TransformingTextField: View {
             }
             transformedText = transformer(newText)
         }
-        
-        static let transformForMoney: (String) -> String = { input in
-            var result = ""
-            let filtered = input.filter { "0123456789".contains($0) }
-            guard let dub = Double(filtered) else { return result }
-            let divided = dub / 100
-            // Assuming 'money' function is defined elsewhere to format the string as money
-            let str = divided.money()
-            for character in str {
-                result.append(character)
-            }
-            return result
-        }
     }
 }
-
