@@ -104,6 +104,19 @@ public struct TransformingTextField: View {
             }
             transformedText = transformer(newText)
         }
+        
+        static let transformForMoney: (String) -> String = { input in
+            var result = ""
+            let filtered = input.filter { "0123456789".contains($0) }
+            guard let dub = Double(filtered) else { return result }
+            let divided = dub / 100
+            // Assuming 'money' function is defined elsewhere to format the string as money
+            let str = divided.money()
+            for character in str {
+                result.append(character)
+            }
+            return result
+        }
     }
 }
 
