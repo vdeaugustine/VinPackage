@@ -42,7 +42,7 @@ public struct TransformingTextField: View {
     ///   - text: A binding to the source of truth for the text value in the parent view.
     ///   - characterLimit: An optional integer specifying the maximum number of characters allowed.
     ///   - transformer: A closure that takes a string as its input and returns a transformed string.
-    init(_ titleKey: String,
+    public init(_ titleKey: String,
          text: Binding<String>,
          characterLimit: Int? = nil,
          _ transformer: @escaping (String) -> String) {
@@ -62,7 +62,7 @@ public struct TransformingTextField: View {
     // MARK: - TextTransformer
     
     /// A class that observes and transforms text input, limiting the number of characters if a limit is set.
-    private class TextTransformer: ObservableObject {
+    fileprivate class TextTransformer: ObservableObject {
         
         /// The text that has been transformed by the `transformer` closure.
         @Published var transformedText: String = ""
