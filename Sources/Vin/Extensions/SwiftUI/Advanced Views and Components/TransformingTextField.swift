@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+
 // MARK: - TransformingTextField
 
 /// A view that presents a text field which applies a transformation to the text input.
@@ -21,7 +22,7 @@ import Combine
 ///
 /// - Availability: iOS 14.0+
 @available(iOS 14, *)
-struct TransformingTextField: View {
+public struct TransformingTextField: View {
     /// The title key for the text field, used as a label.
     var titleKey: String
     
@@ -52,7 +53,7 @@ struct TransformingTextField: View {
     }
     
     /// The content and behavior of the view.
-    var body: some View {
+    public var body: some View {
         TextField(titleKey,
                   text: Binding(get: { self.textTransformer.transformedText },
                                 set: { self.textTransformer.updateText($0) }))
