@@ -65,7 +65,7 @@ public struct TransformingTextField: View {
         guard let dub = Double(filtered) else { return result }
         let divided = dub / 100
         // Assuming 'money' function is defined elsewhere to format the string as money
-        let str = divided.money()
+        let str = divided.money(trimZeroCents: false)
         for character in str {
             result.append(character)
         }
