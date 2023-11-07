@@ -23,25 +23,12 @@ import SwiftUI
 /// - Availability: iOS 14.0+
 @available(iOS 14, *)
 public struct TransformingTextField: View {
-    /// The title key for the text field, used as a label.
     var titleKey: String
-
-    /// A binding to the text input from the parent view.
     @Binding var text: String
-
-    /// An optional limit to the number of characters that can be input.
     var characterLimit: Int?
 
-    /// The object that manages the transformation of the text.
     @StateObject private var textTransformer: TextTransformer
 
-    /// Initializes a `TransformingTextField` with a title, text binding, optional character limit, and a transformation closure.
-    ///
-    /// - Parameters:
-    ///   - titleKey: The title string identifying the text field.
-    ///   - text: A binding to the source of truth for the text value in the parent view.
-    ///   - characterLimit: An optional integer specifying the maximum number of characters allowed.
-    ///   - transformer: A closure that takes a string as its input and returns a transformed string.
     public init(_ titleKey: String,
                 text: Binding<String>,
                 characterLimit: Int? = nil,
@@ -49,16 +36,16 @@ public struct TransformingTextField: View {
         self._text = text
         self.titleKey = titleKey
         self._textTransformer = StateObject(wrappedValue: TextTransformer(transformer: transformer,
-                                                                          characterLimit: characterLimit))
+                                                                          characterLimit: characterLimit,
+                                                                          textBinding: text)) // Pass the binding here
     }
 
-    /// The content and behavior of the view.
     public var body: some View {
         TextField(titleKey,
                   text: Binding(get: { self.textTransformer.transformedText },
                                 set: { self.textTransformer.updateText($0) }))
     }
-    
+
     public static let transformForMoney: (String) -> String = { input in
         var result = ""
         let filtered = input.filter { "0123456789".contains($0) }
@@ -72,32 +59,30 @@ public struct TransformingTextField: View {
         return result
     }
 
-    // MARK: - TextTransformer
-
-    /// A class that observes and transforms text input, limiting the number of characters if a limit is set.
     fileprivate class TextTransformer: ObservableObject {
-        /// The text that has been transformed by the `transformer` closure.
-        @Published var transformedText: String = ""
+        @Published var transformedText: String {
+            didSet {
+                // When transformedText is set, also update the original binding.
+                if transformedText != textBinding.wrappedValue {
+                    textBinding.wrappedValue = transformedText
+                }
+            }
+        }
 
-        /// The closure that defines how the text should be transformed.
         let transformer: (String) -> String
-
-        /// The optional maximum number of characters allowed in the text.
         let characterLimit: Int?
-
-        /// A set of any type that conforms to the `Cancellable` protocol, used to cancel the publisher when no longer needed.
         private var cancellables = Set<AnyCancellable>()
+        var textBinding: Binding<String> // Add this line
 
-        /// Initializes a `TextTransformer` with a transformation closure and an optional character limit.
-        ///
-        /// - Parameters:
-        ///   - transformer: A closure that takes a string as its input and returns a transformed string.
-        ///   - characterLimit: An optional integer specifying the maximum number of characters allowed.
-        init(transformer: @escaping (String) -> String, characterLimit: Int?) {
+        init(transformer: @escaping (String) -> String, characterLimit: Int?, textBinding: Binding<String>) {
             self.transformer = transformer
             self.characterLimit = characterLimit
+            self.textBinding = textBinding // Initialize the binding
+            self.transformedText = textBinding.wrappedValue // Initialize transformedText with the binding's initial value
+
             // Set up a publisher that reacts to changes in `transformedText`, applies the transformation, and ensures it executes on the main thread.
             $transformedText
+                .dropFirst() // Drop the first value since it's already been initialized above
                 .map(transformer)
                 .receive(on: RunLoop.main)
                 .sink { [weak self] newText in
@@ -106,10 +91,6 @@ public struct TransformingTextField: View {
                 .store(in: &cancellables)
         }
 
-        /// Updates the `transformedText` property with the new text after applying the transformation.
-        /// If a character limit is set, it will not update the text if the new text exceeds the limit.
-        ///
-        /// - Parameter newText: The new text to be transformed and set.
         func updateText(_ newText: String) {
             if let characterLimit, newText.count > characterLimit {
                 return
