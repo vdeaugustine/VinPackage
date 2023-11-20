@@ -316,6 +316,8 @@ public struct TabModifier<T: RawRepresentable>: ViewModifier where T.RawValue ==
     }
 }
 
+// MARK: - PushTopModifier
+
 /// A view modifier that aligns the content to the top of the available space.
 ///
 /// Use `PushTopModifier` to align the content to the top of the available space,
@@ -330,7 +332,7 @@ public struct TabModifier<T: RawRepresentable>: ViewModifier where T.RawValue ==
 public struct PushTopModifier: ViewModifier {
     /// The horizontal alignment for positioning the content within the available space.
     var alignment: HorizontalAlignment
-    
+
     /// The view modifier's body, which applies the alignment and pushes the content to the top.
     ///
     /// - Parameter content: The content to be aligned and pushed to the top.
@@ -342,8 +344,6 @@ public struct PushTopModifier: ViewModifier {
         }
     }
 }
-
-
 
 // MARK: - PaddingModifier
 
@@ -366,6 +366,8 @@ public struct PaddingModifier: ViewModifier {
     }
 }
 
+// MARK: - SearchableIfSearching
+
 /// A `ViewModifier` that conditionally applies the `searchable` modifier based on the `isSearching` flag.
 ///
 /// If `isSearching` is set to `true`, the view content will be made searchable. Otherwise, it will remain unmodified.
@@ -386,10 +388,9 @@ public struct PaddingModifier: ViewModifier {
 /// - SeeAlso: `searchable(_:suggestion:)` method in the `View` protocol.
 @available(iOS 15.0, *)
 public struct SearchableIfSearching: ViewModifier {
-
     /// Indicates whether the content should be made searchable.
     let isSearching: Bool
-    
+
     /// A binding to the text that's being used for search.
     ///
     /// Changes to this binding will be reflected immediately in the view's search functionality.
@@ -411,7 +412,50 @@ public struct SearchableIfSearching: ViewModifier {
     }
 }
 
+// MARK: - FadeEffectModifier
 
+/// A custom `ViewModifier` that applies a fading effect to a view.
+///
+/// This modifier uses a linear gradient to create a fading effect from the specified start opacity to the end opacity.
+/// You can control the direction of the fade by specifying the start and end points.
+///
+/// - Availability: iOS 13.0+
+/// - Note: To apply this modifier, use the `.modifier(FadeEffectModifier(...))` method on any view.
+@available(iOS 13.0, *)
+public struct FadeEffectModifier: ViewModifier {
+    /// The starting opacity for the fade effect.
+    ///
+    /// The default value is `1` (fully opaque).
+    var startOpacity: Double = 1
 
+    /// The ending opacity for the fade effect.
+    ///
+    /// The default value is `0` (fully transparent).
+    var endOpacity: Double = 0
 
+    /// The starting point of the gradient used for the fade effect.
+    ///
+    /// The default value is `.center`.
+    var startPoint: UnitPoint = .center
 
+    /// The ending point of the gradient used for the fade effect.
+    ///
+    /// The default value is `.bottom`.
+    var endPoint: UnitPoint = .bottom
+
+    /// The body of the `FadeEffectModifier`.
+    ///
+    /// Applies a masking linear gradient to the content, creating a fading effect from `startOpacity` to `endOpacity`.
+    ///
+    /// - Parameter content: The content of the view that the modifier is applied to.
+    /// - Returns: A view modified with a fading effect.
+    public func body(content: Content) -> some View {
+        content
+            .mask(
+                LinearGradient(gradient: Gradient(stops: [.init(color: Color.white.opacity(startOpacity), location: 0),
+                                                          .init(color: Color.white.opacity(endOpacity), location: 1)]),
+                startPoint: startPoint,
+                endPoint: endPoint)
+            )
+    }
+}

@@ -384,4 +384,31 @@ public extension View {
     func conditionallySearchable(isSearching: Bool, searchText: Binding<String>) -> some View {
         modifier(SearchableIfSearching(isSearching: isSearching, searchText: searchText))
     }
+
+    /// Applies the `FadeEffectModifier` to a view with customizable parameters.
+    ///
+    /// This method extends `View` to include an easy way to apply the fading effect. You can customize the fade effect
+    /// by providing values for the start and end opacities and points.
+    ///
+    /// - Parameters:
+    ///   - startOpacity: The starting opacity of the fade effect. Defaults to `1` (fully opaque).
+    ///   - endOpacity: The ending opacity of the fade effect. Defaults to `0` (fully transparent).
+    ///   - startPoint: The starting point of the gradient used for the fade effect. Defaults to `.center`.
+    ///   - endPoint: The ending point of the gradient used for the fade effect. Defaults to `.bottom`.
+    /// - Returns: A view modified with the `FadeEffectModifier` using the specified parameters.
+    ///
+    /// - Availability: iOS 13.0+
+    @available(iOS 13.0, *)
+    func fadeEffect(startOpacity: Double = 1,
+                    endOpacity: Double = 0,
+                    startPoint: UnitPoint = .center,
+                    endPoint: UnitPoint = .bottom)
+        -> some View {
+        modifier(
+            FadeEffectModifier(startOpacity: startOpacity,
+                               endOpacity: endOpacity,
+                               startPoint: startPoint,
+                               endPoint: endPoint)
+        )
+    }
 }
