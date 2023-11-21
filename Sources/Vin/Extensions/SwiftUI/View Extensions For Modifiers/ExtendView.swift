@@ -35,3 +35,37 @@ public extension View {
         )
     }
 }
+
+/// An extension for `View` that allows rounding specific corners.
+///
+/// This extension introduces the `cornerRadius(_:corners:)` method to SwiftUI's `View`, enabling the rounding of specified corners of the view. It leverages the custom `RoundedCorner` shape to apply the corner radius only to the specified corners.
+///
+/// - Important:
+///   - Requires **iOS 13.0** or later.
+///
+/// Example:
+/// ```
+/// Text("Hello, World!")
+///     .cornerRadius(10, corners: [.topLeft, .bottomRight])
+/// ```
+@available(iOS 13.0, *)
+public extension View {
+    
+    /// Applies a corner radius to specified corners of the view.
+    /// - Example:
+    /// ```swift
+    /// Text("Hello, World!")
+    ///     .cornerRadius(10, corners: [.topLeft, .bottomRight])
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - radius: The radius to use when drawing rounded corners.
+    ///   - corners: The corners of the view to round.
+    ///
+    /// - Returns: A view with the specified corners rounded.
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+}
+
+
