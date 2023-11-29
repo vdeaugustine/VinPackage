@@ -31,16 +31,16 @@ import SwiftUI
 @available(iOS 13.0, *)
 public struct CurrencyTextField: UIViewRepresentable {
     /// A binding to the string value representing the currency amount.
-    @Binding var value: String
+    @Binding public var value: String
 
     /// A binding to a Boolean value that determines whether the text field is focused.
-    @Binding var isFocused: Bool
+    @Binding public var isFocused: Bool
 
     /// The maximum number of characters allowed in the text field. Defaults to 12.
-    var characterLimit: Int = 12
+    public var characterLimit: Int = 12
 
     /// An optional closure for additional customization of the `UITextField`.
-    var customizer: ((UITextField) -> Void)?
+    public var customizer: ((UITextField) -> Void)?
 
     /// Formats a string as a currency value.
     ///
