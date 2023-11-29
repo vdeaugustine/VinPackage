@@ -153,24 +153,10 @@ public struct CurrencyTextField: UIViewRepresentable {
             textField.text = CurrencyTextField.formatAsCurrency(string: numericString)
             return false
         }
-
-        /// Handles the event when the text field begins editing.
-        ///
-        /// - Parameter textField: The `UITextField` that started editing.
-        public func textFieldDidBeginEditing(_ textField: UITextField) {
-            parent.isFocused = true
-        }
-
-        /// Handles the event when the text field ends editing.
-        ///
-        /// - Parameter textField: The `UITextField` that ended editing.
-        public func textFieldDidEndEditing(_ textField: UITextField) {
-            parent.isFocused = false
-        }
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 15.0, *)
 #Preview {
     VStack {
         Text("Hello")
@@ -180,5 +166,6 @@ public struct CurrencyTextField: UIViewRepresentable {
             $0.font = .systemFont(ofSize: 50, weight: .bold)
         }
         .frame(height: 100)
+        
     }
 }
