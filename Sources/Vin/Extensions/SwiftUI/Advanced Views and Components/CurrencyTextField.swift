@@ -30,6 +30,17 @@ import SwiftUI
 ///
 @available(iOS 13.0, *)
 public struct CurrencyTextField: UIViewRepresentable {
+    
+    public init(value: Binding<String>,
+                isFocused: Binding<Bool>,
+                characterLimit: Int,
+                customizer: ((UITextField) -> Void)? = nil) {
+        self._value = value
+        self._isFocused = isFocused
+        self.characterLimit = characterLimit
+        self.customizer = customizer
+    }
+
     /// A binding to the string value representing the currency amount.
     @Binding public var value: String
 
