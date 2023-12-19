@@ -116,12 +116,19 @@ public extension View {
     /// This function returns a ZStack with the current view on the bottom and a Color view on the top with an opacity of 0.001. This allows the ZStack to detect user interactions for the entire view, even if the top Color view is transparent.
     ///
     /// The alignment parameter is an optional parameter that can be used to specify the alignment of the views within the ZStack. If no alignment is specified, the default value of .center is used.
+    @available(iOS 15.0, *)
     func allPartsTappable(alignment: Alignment? = nil) -> some View {
-        ZStack(alignment: alignment ?? .center) {
-            self
-            Color.white
-                .opacity(0.001)
-        }
+//        ZStack(alignment: alignment ?? .center) {
+//            self
+//            Color.white
+//                .opacity(0.001)
+//        }
+        
+        self
+            .overlay {
+                Color.white.opacity(0.001)
+            }
+        
     }
 
     /// A utility function that hides the software keyboard if it is currently visible.
