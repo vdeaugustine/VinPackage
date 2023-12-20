@@ -459,3 +459,251 @@ public struct FadeEffectModifier: ViewModifier {
             )
     }
 }
+
+// MARK: - SecondLayerBackgroundModifier
+
+/// A modifier that applies a second-layer background to a view.
+///
+/// `SecondLayerBackgroundModifier` is a `ViewModifier` that provides a way to apply
+/// a secondary background layer to any SwiftUI view. It supports conditional modifications
+/// like ignoring safe areas and applying corner radius, based on the provided properties.
+///
+/// - Requires: iOS 15.0 or later.
+///
+/// ## Topics
+///
+/// ### Creating a Second Layer Background Modifier
+///
+/// - ``init(ignoresSafeAreas:cornerRadius:)``
+///
+/// ### Applying the Modifier
+///
+/// - ``body(content:)``
+///
+@available(iOS 15.0, *)
+public struct SecondLayerBackgroundModifier: ViewModifier {
+    /// The current color scheme of the environment.
+    @Environment(\.colorScheme) var colorScheme
+
+    /// A Boolean value that determines whether the background ignores the safe area.
+    var ignoresSafeAreas: Bool
+
+    /// The corner radius for the background. If `nil`, no corner radius is applied.
+    var cornerRadius: CGFloat?
+
+    /// The content and behavior of the view.
+    ///
+    /// The modifier applies a background layer to the content, with optional modifications
+    /// such as ignoring safe areas and applying a corner radius.
+    ///
+    /// - Parameter content: The original content of the view.
+    ///
+    /// - Returns: A modified view that includes the second-layer background.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Hello, World!")
+    ///     .modifier(SecondLayerBackgroundModifier(ignoresSafeAreas: true, cornerRadius: 10))
+    /// ```
+    ///
+    /// In this example, the text will have a secondary background that ignores the safe areas
+    /// and has a corner radius of 10 points.
+    ///
+    public func body(content: Content) -> some View {
+        content
+            .background {
+                backgroundColor
+                    .conditionalModifier(ignoresSafeAreas) {
+                        $0.ignoresSafeArea()
+                    }
+                    .conditionalModifier(cornerRadius != nil) {
+                        $0
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: cornerRadius ?? 0)
+                            )
+                    }
+            }
+    }
+
+    /// Computes the background color based on the current color scheme.
+    ///
+    /// - Returns: A `Color` that represents the background color.
+    ///   The color changes depending on whether the color scheme is light or dark.
+    ///
+    private var backgroundColor: Color {
+        switch colorScheme {
+            case .light:
+                return UIColor.secondarySystemFill.color
+            case .dark:
+                return UIColor.secondarySystemFill.color
+            @unknown default:
+                return UIColor.systemBackground.color
+        }
+    }
+}
+
+// MARK: - LayerBackgroundModifier
+
+/// A modifier that applies a custom background layer to a view.
+///
+/// `LayerBackgroundModifier` is a `ViewModifier` designed to add a customizable
+/// background layer to any SwiftUI view. It offers options for ignoring safe areas and
+/// setting a corner radius, adapting to the current environment's color scheme.
+///
+/// - Requires: iOS 15.0 or later.
+///
+/// ## Topics
+///
+/// ### Creating a Layer Background Modifier
+///
+/// - ``init(ignoresSafeAreas:cornerRadius:)``
+///
+/// ### Applying the Modifier
+///
+/// - ``body(content:)``
+///
+@available(iOS 15.0, *)
+struct LayerBackgroundModifier: ViewModifier {
+    /// The current color scheme of the environment.
+    @Environment(\.colorScheme) var colorScheme
+
+    /// A Boolean value that indicates whether the background should ignore safe area insets.
+    var ignoresSafeAreas: Bool
+
+    /// The corner radius for the background. If `nil`, the background will not have rounded corners.
+    var cornerRadius: CGFloat?
+
+    /// The content and behavior of the view.
+    ///
+    /// Applies a background to the content, optionally ignoring safe areas and adding a corner radius,
+    /// based on the given properties. The background color varies according to the current color scheme.
+    ///
+    /// - Parameter content: The original content of the view.
+    ///
+    /// - Returns: A view modified with a custom background layer.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Hello, World!")
+    ///     .modifier(LayerBackgroundModifier(ignoresSafeAreas: true, cornerRadius: 10))
+    /// ```
+    ///
+    /// This example shows a text view with a background that extends to the edges of the safe area
+    /// and has a corner radius of 10 points.
+    ///
+    func body(content: Content) -> some View {
+        content
+            .background {
+                backgroundColor
+                    .conditionalModifier(ignoresSafeAreas) {
+                        $0.ignoresSafeArea()
+                    }
+                    .conditionalModifier(cornerRadius != nil) {
+                        $0
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: cornerRadius ?? 0)
+                            )
+                    }
+            }
+    }
+
+    /// Determines the background color based on the current color scheme.
+    ///
+    /// - Returns: A `Color` that represents the background color, adapting to light and dark modes.
+    ///
+    private var backgroundColor: Color {
+        switch colorScheme {
+            case .light:
+                return UIColor.secondarySystemGroupedBackground.color
+            case .dark:
+                return UIColor.tertiarySystemGroupedBackground.color
+            @unknown default:
+                return UIColor.systemBackground.color
+        }
+    }
+}
+
+// MARK: - MainBackgroundModifier
+
+/// A modifier that applies a primary background layer to a view.
+///
+/// `MainBackgroundModifier` is a `ViewModifier` that adds a primary background layer
+/// to any SwiftUI view. It offers options for setting a corner radius and ignoring safe
+/// area insets, adapting dynamically to the current color scheme environment.
+///
+/// - Requires: iOS 15.0 or later.
+///
+/// ## Topics
+///
+/// ### Creating a Main Background Modifier
+///
+/// - ``init(ignoresSafeAreas:cornerRadius:)``
+///
+/// ### Applying the Modifier
+///
+/// - ``body(content:)``
+///
+@available(iOS 15.0, *)
+struct MainBackgroundModifier: ViewModifier {
+    /// The current color scheme of the environment.
+    @Environment(\.colorScheme) var colorScheme
+
+    /// A Boolean value indicating whether the background should ignore safe area insets.
+    var ignoresSafeAreas: Bool
+
+    /// The corner radius for the background. If `nil`, the background will not have rounded corners.
+    var cornerRadius: CGFloat?
+
+    /// The content and behavior of the view.
+    ///
+    /// Applies a primary background to the content, with options for corner radius and ignoring
+    /// safe areas. The background color is determined by the current color scheme.
+    ///
+    /// - Parameter content: The original content of the view.
+    ///
+    /// - Returns: A view modified with a primary background layer.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Welcome")
+    ///     .modifier(MainBackgroundModifier(ignoresSafeAreas: false, cornerRadius: 8))
+    /// ```
+    ///
+    /// In this example, the text view has a primary background with rounded corners of 8 points,
+    /// and it does not extend beyond the safe area.
+    ///
+    func body(content: Content) -> some View {
+        content
+            .background {
+                backgroundColor
+                    .conditionalModifier(cornerRadius != nil) {
+                        $0
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: cornerRadius ?? 0)
+                            )
+                    }
+                    .conditionalModifier(ignoresSafeAreas) {
+                        $0
+                            .ignoresSafeArea()
+                    }
+            }
+    }
+
+    /// Determines the background color based on the current color scheme.
+    ///
+    /// - Returns: A `Color` that represents the primary background color, adapting to light and dark modes.
+    ///
+    private var backgroundColor: Color {
+        switch colorScheme {
+            case .light:
+                return UIColor.systemGroupedBackground.color
+            case .dark:
+                return UIColor.secondarySystemGroupedBackground.color
+            @unknown default:
+                return UIColor.systemBackground.color
+        }
+    }
+}

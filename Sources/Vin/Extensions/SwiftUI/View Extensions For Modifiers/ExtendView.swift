@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Vincent DeAugustine on 11/20/23.
 //
@@ -8,10 +8,8 @@
 import Foundation
 import SwiftUI
 
-
 @available(iOS 13.0, *)
 public extension View {
-    
     /// Retrieves the frame of the view in the specified coordinate space and passes it to the callback.
     ///
     /// Use this method to get the frame of the view in a given coordinate space. The frame is passed to the provided callback closure.
@@ -50,7 +48,6 @@ public extension View {
 /// ```
 @available(iOS 13.0, *)
 public extension View {
-    
     /// Applies a corner radius to specified corners of the view.
     /// - Example:
     /// ```swift
@@ -68,4 +65,54 @@ public extension View {
     }
 }
 
+/// A `View` extension to conditionally apply a modifier.
+///
+/// Use this extension to apply a modifier to a view only if a specific condition is true.
+/// This extension adds a `conditionalModifier` method to any SwiftUI `View`, allowing you
+/// to add modifiers conditionally without affecting the view hierarchy.
+///
 
+///
+/// ## Topics
+///
+/// ### Using the Conditional Modifier
+///
+/// - ``conditionalModifier(_:modifier:)``
+///
+@available(iOS 13.0, *)
+public extension View {
+    /// Applies a modifier to the view conditionally.
+    ///
+    /// Use this method to apply a modifier to the view based on a condition. If the condition
+    /// is `true`, the provided modifier is applied. If `false`, the view remains unmodified.
+    ///
+    /// - Parameters:
+    ///   - condition: A `Bool` value determining whether to apply the modifier.
+    ///   - modifier: A closure that takes the current view (`self`) and returns
+    ///     a modified view. The closure is of type `@escaping (Self) -> T` where `T` is a `View`.
+    ///
+    /// - Returns: A view that is either modified by the provided closure if the condition
+    ///   is `true`, or the original view if the condition is `false`.
+    /// - Requires: iOS 13.0 or later.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Hello, World!")
+    ///     .conditionalModifier(true) { $0.foregroundColor(.blue) }
+    /// ```
+    ///
+    /// In this example, the text will be colored blue because the condition is `true`.
+    ///
+    func conditionalModifier<T: View>(_ condition: Bool,
+                                      _ modifier: @escaping (Self) -> T)
+        -> some View {
+        Group {
+            if condition {
+                modifier(self)
+            } else {
+                self
+            }
+        }
+    }
+}

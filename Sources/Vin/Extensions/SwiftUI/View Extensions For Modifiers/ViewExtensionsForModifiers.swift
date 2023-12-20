@@ -123,12 +123,10 @@ public extension View {
 //            Color.white
 //                .opacity(0.001)
 //        }
-        
-        self
-            .overlay {
-                Color.white.opacity(0.001)
-            }
-        
+
+        overlay {
+            Color.white.opacity(0.001)
+        }
     }
 
     /// A utility function that hides the software keyboard if it is currently visible.
@@ -417,5 +415,97 @@ public extension View {
                                startPoint: startPoint,
                                endPoint: endPoint)
         )
+    }
+}
+
+/// Extension to apply various background styles to a `View`.
+///
+/// This extension adds methods to SwiftUI `View` to apply different types of background
+/// layers with customization options for corner radius and safe area considerations.
+///
+/// - Requires: iOS 15.0 or later.
+///
+@available(iOS 15.0, *)
+public extension View {
+    /// Applies a layer background to the view with optional corner radius and safe area considerations.
+    ///
+    /// Use this method to add a customizable layer background to the view. You can specify the corner
+    /// radius and whether the background should ignore safe areas.
+    ///
+    /// - Parameters:
+    ///   - cornerRadius: The corner radius for the background. If `nil`, no corner radius is applied. Default is `nil`.
+    ///   - ignores: A Boolean value that indicates whether the background should ignore safe area insets. Default is `false`.
+    ///
+    /// - Returns: A view modified with a layer background.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Hello, World!")
+    ///     .layerBackground(cornerRadius: 10, ignores: true)
+    /// ```
+    ///
+    /// This example adds a layer background to the text with a 10-point corner radius and extends beyond the safe area.
+    ///
+    func layerBackground(cornerRadius: CGFloat? = nil,
+                         ignores: Bool = false)
+        -> some View {
+        modifier(LayerBackgroundModifier(ignoresSafeAreas: ignores,
+                                         cornerRadius: cornerRadius))
+    }
+
+    /// Applies a second-layer background to the view with optional corner radius and safe area considerations.
+    ///
+    /// Use this method to add a second layer of background to the view. You can specify the corner
+    /// radius and whether the background should ignore safe areas.
+    ///
+    /// - Parameters:
+    ///   - cornerRadius: The corner radius for the background. If `nil`, no corner radius is applied. Default is `nil`.
+    ///   - ignores: A Boolean value that indicates whether the background should ignore safe area insets. Default is `false`.
+    ///
+    /// - Returns: A view modified with a second-layer background.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Welcome")
+    ///     .secondLayerBackground(cornerRadius: 8, ignores: true)
+    /// ```
+    ///
+    /// In this example, the text view has a second-layer background with rounded corners of 8 points
+    /// that extends beyond the safe area.
+    ///
+    func secondLayerBackground(cornerRadius: CGFloat? = nil,
+                               ignores: Bool = false)
+        -> some View {
+        modifier(SecondLayerBackgroundModifier(ignoresSafeAreas: ignores,
+                                               cornerRadius: cornerRadius))
+    }
+
+    /// Applies a primary background to the view with optional safe area considerations and corner radius.
+    ///
+    /// This method adds a primary background to the view. You can specify whether the background should
+    /// ignore safe areas and the corner radius.
+    ///
+    /// - Parameters:
+    ///   - ignores: A Boolean value indicating whether the background should ignore safe area insets. Default is `true`.
+    ///   - cornerRadius: The corner radius for the background. If `nil`, no corner radius is applied. Default is `nil`.
+    ///
+    /// - Returns: A view modified with a primary background.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Text("Goodbye")
+    ///     .mainBackground(ignores: false, cornerRadius: 5)
+    /// ```
+    ///
+    /// This example adds a primary background to the text with a 5-point corner radius, contained within the safe area.
+    ///
+    func mainBackground(ignores: Bool = true,
+                        cornerRadius: CGFloat? = nil)
+        -> some View {
+        modifier(MainBackgroundModifier(ignoresSafeAreas: ignores,
+                                        cornerRadius: cornerRadius))
     }
 }
