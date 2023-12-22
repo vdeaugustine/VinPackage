@@ -14,6 +14,13 @@ public struct SystemImageWithFilledBackground: View {
     var rotationDegrees: CGFloat = 0
     var gradient: LinearGradient?
     
+    public init(systemName: String, backgroundColor: Color, rotationDegrees: CGFloat = 0, gradient: LinearGradient? = nil) {
+        self.systemName = systemName
+        self.backgroundColor = backgroundColor
+        self.rotationDegrees = rotationDegrees
+        self.gradient = gradient
+    }
+    
     public var body: some View {
         ZStack {
             if let gradient {

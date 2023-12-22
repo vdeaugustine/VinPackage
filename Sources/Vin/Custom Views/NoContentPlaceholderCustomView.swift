@@ -1,12 +1,11 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by Vincent DeAugustine on 12/21/23.
 //
 
 import SwiftUI
-
 
 @available(iOS 15.0, *)
 public struct NoContentPlaceholderCustomView: View {
@@ -14,16 +13,31 @@ public struct NoContentPlaceholderCustomView: View {
     var title: String
     var subTitle: String
     var imageSystemName: String
-    var backgroundColor: Color? = nil
-    var buttonTitle: String? = nil
-    var buttonColor: Color? = nil
-    var onButtonTap: (() -> Void)? = nil
+    var backgroundColor: Color?
+    var buttonTitle: String?
+    var buttonColor: Color?
+    var onButtonTap: (() -> Void)?
 
     private var background: Color {
         backgroundColor ?? UIColor.systemBackground.color
     }
 
-    
+    public init(title: String,
+                subTitle: String,
+                imageSystemName: String,
+                backgroundColor: Color? = nil,
+                buttonTitle: String? = nil,
+                buttonColor: Color? = nil,
+                onButtonTap: (() -> Void)? = nil) {
+        self.title = title
+        self.subTitle = subTitle
+        self.imageSystemName = imageSystemName
+        self.backgroundColor = backgroundColor
+        self.buttonTitle = buttonTitle
+        self.buttonColor = buttonColor
+        self.onButtonTap = onButtonTap
+    }
+
     public var body: some View {
         VStack {
             Spacer()
@@ -75,10 +89,10 @@ public struct NoContentPlaceholderCustomView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    if #available(iOS 15.0, *) {
 //        NoContentPlaceholderCustomView(title: "Testing", subTitle: "this is a test", imageSystemName: "photo")
 //    } else {
 //        // Fallback on earlier versions
 //    }
-//}
+// }
