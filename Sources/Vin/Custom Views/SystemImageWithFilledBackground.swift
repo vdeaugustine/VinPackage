@@ -8,13 +8,13 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-struct SystemImageWithFilledBackground: View {
+public struct SystemImageWithFilledBackground: View {
     let systemName: String
     let backgroundColor: Color
     var rotationDegrees: CGFloat = 0
     var gradient: LinearGradient?
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             if let gradient {
                 gradient
