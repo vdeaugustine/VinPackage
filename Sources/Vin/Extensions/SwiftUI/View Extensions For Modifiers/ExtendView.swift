@@ -116,3 +116,25 @@ public extension View {
         }
     }
 }
+
+@available(iOS 13.0, *)
+public extension View {
+    /// Extends the functionality of `View` to support setting both maximum width and height to infinity.
+    ///
+    /// This extension provides a convenient method to set the maximum width and height of a view to `.infinity`,
+    /// effectively allowing the view to expand as much as the parent view allows. This is useful in scenarios where
+    /// you want the view to occupy all available space, such as when creating a background view or a flexible layout.
+    ///
+    /// - Requires: iOS 13.0 or later.
+    ///
+    /// - Returns: A modified view that has its maximum width and height set to `.infinity`.
+    ///
+    /// Example:
+    /// ```swift
+    /// Text("Hello, World!")
+    ///     .maxWidthAndHeight()
+    /// ```
+    func maxWidthAndHeight() -> some View {
+        frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
