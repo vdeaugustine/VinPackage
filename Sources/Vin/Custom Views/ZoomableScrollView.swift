@@ -16,8 +16,8 @@ import UIKit
 public struct ZoomableScrollView<Content: View>: UIViewRepresentable {
     private var content: Content
 
-    /// A view that allows for pinching to zoom, and panning; features native to UIKit but not native to SwiftUI. It uses UIHostingController 
-    init(@ViewBuilder content: () -> Content) {
+    /// A view that allows for pinching to zoom, and panning; features native to UIKit but not native to SwiftUI. It uses UIHostingController
+    public init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
 
