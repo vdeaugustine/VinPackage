@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUI
+import CoreGraphics
 
 public extension CGFloat {
     /// Provides a convenient method for rounding a CGFloat value to a specified number of decimal places.
