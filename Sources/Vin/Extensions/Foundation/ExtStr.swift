@@ -66,15 +66,15 @@ public extension String {
     ///
     /// This extension adds a method to the String type that formats a string as a dollar amount. The method first attempts to convert the string to a Double value using the Double(_:) initializer.
 
-    /// If the conversion is successful, the resulting Double value is divided by 100 if makeCents is true, and then passed to the money(includeCents:) method to create a formatted string.
+    /// If the conversion is successful, the resulting Double value is divided by 100 if makeCents is true, and then passed to the money(includeCents:trimZeroCents:) method to create a formatted string.
 
     /// If the conversion is unsuccessful, the method returns an empty string.
-    func makeMoney(makeCents: Bool) -> String {
+    func makeMoney(makeCents: Bool, trimZeroCents: Bool = true) -> String {
         var amount: Double = 0
         if let dub = Double(self) {
             amount = makeCents ? (dub / 100) : dub
         }
-        return amount.money(includeCents: makeCents)
+        return amount.money(includeCents: makeCents, trimZeroCents: trimZeroCents)
     }
 
     /// An extension to the String type that provides a method for removing all characters in the string after and including a specified character.
