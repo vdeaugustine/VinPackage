@@ -217,29 +217,41 @@ public extension Double {
         return .positional
     }
 
-    /// Only the necessary units are shown
-    func breakDownTime(includeUnits: [String]? = nil) -> String {
+    /**
+          An extension on `Double` that provides a method to break down a time interval in seconds into a human-readable format consisting of various time units.
+
+          This extension is particularly useful for converting a duration in seconds into a more understandable representation like "1h 1m 1s" or "2d 4h", depending on the specified time units.
+
+          ## Usage
+          The `breakDownTime` method allows you to specify which time units to include in the breakdown, or it will use all available units by default.
+
+          ### Example
+          ```swift
+          let timeInSeconds: Double = 3661
+
+          // Full breakdown using all units
+          let fullBreakdown = timeInSeconds.breakDownTime() // "1h 1m 1s"
+
+          // Breakdown with only hours and minutes
+          let hoursAndMinutesOnly = timeInSeconds.breakDownTime(includeUnits: [.hour, .minute]) // "1h 1m"
+
+          // Breakdown with only days (will return "0s" if no full days are present)
+          let daysOnly = timeInSeconds.breakDownTime(includeUnits: [.day]) // "0s"
+     */
+    func breakDownTime(includeUnits: [TimeUnit]? = nil) -> String {
         let seconds = self
-        let timeUnits: [(unit: String, seconds: Double)] = [("y", 365 * 24 * 60 * 60),
-                                                            ("mo", 30 * 24 * 60 * 60),
-                                                            ("w", 7 * 24 * 60 * 60),
-                                                            ("d", 24 * 60 * 60),
-                                                            ("h", 60 * 60),
-                                                            ("m", 60),
-                                                            ("s", 1)]
-        
-        let filteredTimeUnits = timeUnits.filter { unit in
-            includeUnits?.contains(unit.unit) ?? true
-        }
+        let allUnits: [TimeUnit] = [.year, .month, .week, .day, .hour, .minute, .second]
+
+        let filteredUnits = includeUnits ?? allUnits
 
         var remainingSeconds = seconds
         var timeComponents: [String] = []
 
-        for unit in filteredTimeUnits {
+        for unit in filteredUnits {
             let value = Int(remainingSeconds / unit.seconds)
 
             if value > 0 {
-                timeComponents.append("\(value)\(unit.unit)")
+                timeComponents.append("\(value)\(unit.abbreviation)")
                 remainingSeconds -= Double(value) * unit.seconds
             }
         }
@@ -251,4 +263,32 @@ public extension Double {
         }
     }
 
+    /// This is used for ``breakDownTime(includeUnits:)``
+    enum TimeUnit {
+        case year, month, week, day, hour, minute, second
+
+        var seconds: Double {
+            switch self {
+                case .year: return 365 * 24 * 60 * 60
+                case .month: return 30 * 24 * 60 * 60
+                case .week: return 7 * 24 * 60 * 60
+                case .day: return 24 * 60 * 60
+                case .hour: return 60 * 60
+                case .minute: return 60
+                case .second: return 1
+            }
+        }
+
+        var abbreviation: String {
+            switch self {
+                case .year: return "y"
+                case .month: return "mo"
+                case .week: return "w"
+                case .day: return "d"
+                case .hour: return "h"
+                case .minute: return "m"
+                case .second: return "s"
+            }
+        }
+    }
 }
