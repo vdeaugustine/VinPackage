@@ -218,7 +218,7 @@ public extension Double {
     }
 
     /// Only the necessary units are shown
-    func breakDownTime() -> String {
+    func breakDownTime(includeUnits: [String]? = nil) -> String {
         let seconds = self
         let timeUnits: [(unit: String, seconds: Double)] = [("y", 365 * 24 * 60 * 60),
                                                             ("mo", 30 * 24 * 60 * 60),
@@ -227,11 +227,15 @@ public extension Double {
                                                             ("h", 60 * 60),
                                                             ("m", 60),
                                                             ("s", 1)]
+        
+        let filteredTimeUnits = timeUnits.filter { unit in
+            includeUnits?.contains(unit.unit) ?? true
+        }
 
         var remainingSeconds = seconds
         var timeComponents: [String] = []
 
-        for unit in timeUnits {
+        for unit in filteredTimeUnits {
             let value = Int(remainingSeconds / unit.seconds)
 
             if value > 0 {
@@ -246,4 +250,5 @@ public extension Double {
             return timeComponents.joined(separator: " ")
         }
     }
+
 }
