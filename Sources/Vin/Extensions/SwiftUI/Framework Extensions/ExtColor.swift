@@ -10,50 +10,64 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public extension Color {
-    /// Defined in Vin package, this is an initializer that takes in a hex string (with or without #) and converts it to a SwiftUI Color
+    /// This is an initializer that takes in a hex string (with or without #) and converts it to a SwiftUI Color
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
+        let validHex = Scanner(string: hex).scanHexInt64(&int)
         let a, r, g, b: UInt64
-        switch hex.count {
-            case 3: // RGB (12-bit)
-                (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-            case 6: // RGB (24-bit)
-                (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-            case 8: // ARGB (32-bit)
-                (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-            default:
-                (a, r, g, b) = (1, 1, 1, 0)
+
+        if validHex {
+            switch hex.count {
+                case 3: // RGB (12-bit)
+                    (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+                case 6: // RGB (24-bit)
+                    (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+                case 8: // ARGB (32-bit)
+                    (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+                default:
+                    (a, r, g, b) = (0, 0, 0, 0) // Default to transparent black
+            }
+        } else {
+            // Handle invalid hex input by setting color to transparent black
+            (a, r, g, b) = (0, 0, 0, 0)
         }
 
         self.init(.sRGB,
-                  red: Double(r) / 255,
-                  green: Double(g) / 255,
-                  blue: Double(b) / 255,
-                  opacity: Double(a) / 255)
+                  red: Double(r) / 255.0,
+                  green: Double(g) / 255.0,
+                  blue: Double(b) / 255.0,
+                  opacity: Double(a) / 255.0)
     }
 
     @available(iOS 14.0, *)
-    var hex: String {
-        let uiColor = UIColor(self)
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
+    var uiColor: UIColor { .init(self) }
 
-        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+    typealias RGBA = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 
-        return String(format: "%02X%02X%02X%02X",
-                      Int(red * 255),
-                      Int(green * 255),
-                      Int(blue * 255),
-                      Int(alpha * 255))
-    }
-    
     @available(iOS 14.0, *)
-    var uiColor: UIColor {
-        UIColor(hex: self.hex)
+    var rgba: RGBA? {
+        var (r, g, b, a): RGBA = (0, 0, 0, 0)
+        return uiColor.getRed(&r, green: &g, blue: &b, alpha: &a) ? (r, g, b, a) : nil
+    }
+
+    @available(iOS 14.0, *)
+    var hexaRGB: String? {
+        guard let (red, green, blue, _) = rgba else { return nil }
+        return String(format: "#%02X%02X%02X",
+                      lround(Double(red) * 255),
+                      lround(Double(green) * 255),
+                      lround(Double(blue) * 255))
+    }
+
+    @available(iOS 14.0, *)
+    var hexaRGBA: String? {
+        guard let (red, green, blue, alpha) = rgba else { return nil }
+        return String(format: "#%02X%02X%02X%02X",
+                      lround(Double(red) * 255),
+                      lround(Double(green) * 255),
+                      lround(Double(blue) * 255),
+                      lround(Double(alpha) * 255))
     }
 
     /// A static property of the Color type that generates a random color.
@@ -67,12 +81,11 @@ public extension Color {
         Color(red: .random(in: 0 ... 255) / 255, green: .random(in: 0 ... 255) / 255, blue: .random(in: 0 ... 255) / 255)
     }
 
-    /// The same background color as a SwiftUI list 
+    /// The same background color as a SwiftUI list
     static let listBackgroundColor: Color = {
         if #available(iOS 15, *) {
             return Color(uiColor: .tertiarySystemGroupedBackground)
-        }
-        else {
+        } else {
             return Color(hex: UIColor.tertiarySystemGroupedBackground.hex)
         }
 
