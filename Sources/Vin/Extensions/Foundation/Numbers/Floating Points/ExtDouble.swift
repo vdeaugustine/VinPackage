@@ -248,6 +248,7 @@ public extension Double {
         var timeComponents: [String] = []
 
         for unit in filteredUnits {
+            guard unit.seconds != 0 else { continue }
             let value = Int(remainingSeconds / unit.seconds)
 
             if value > 0 {
