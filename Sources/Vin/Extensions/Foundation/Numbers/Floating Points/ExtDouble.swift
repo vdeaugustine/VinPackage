@@ -239,6 +239,7 @@ public extension Double {
           let daysOnly = timeInSeconds.breakDownTime(includeUnits: [.day]) // "0s"
      */
     func breakDownTime(includeUnits: [TimeUnit]? = nil) -> String {
+        guard self.isFinite && self.isNaN == false else { return "0s" }
         let seconds = self
         let allUnits: [TimeUnit] = [.year, .month, .week, .day, .hour, .minute, .second]
 
