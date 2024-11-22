@@ -48,39 +48,6 @@ public extension Array {
         return self[num]
     }
 
-    /// Safely accesses the element at the specified index.
-    ///
-    /// This subscript prevents out-of-bounds errors by returning `nil` for invalid indices,
-    /// instead of causing a runtime crash. Use it to safely retrieve elements when the bounds
-    /// of the array are dynamic or uncertain.
-    ///
-    /// - Parameter index: The index of the element you want to access.
-    /// - Returns: The element at the specified index if it exists, otherwise `nil`.
-    ///
-    /// # Example
-    /// ```swift
-    /// let numbers = [10, 20, 30]
-    ///
-    /// // Accessing within bounds
-    /// if let value = numbers[safe: 1] {
-    ///     print("Value at index 1 is \(value)") // Output: Value at index 1 is 20
-    /// }
-    ///
-    /// // Accessing out of bounds
-    /// if let value = numbers[safe: 5] {
-    ///     print("Value at index 5 is \(value)")
-    /// } else {
-    ///     print("Index 5 is out of bounds.") // Output: Index 5 is out of bounds.
-    /// }
-    ///
-    /// // Using optional chaining
-    /// let strings = ["apple", "banana", "cherry"]
-    /// print(strings[safe: 2]?.uppercased() ?? "Index out of bounds") // Output: CHERRY
-    /// ```
-    subscript(safe index: Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-
     /// An extension to the Array type that provides a method for returning a prefix subarray of a given length.
     ///
     /// - Parameter num: The number of elements to include in the subarray.
