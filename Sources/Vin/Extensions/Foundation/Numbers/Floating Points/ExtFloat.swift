@@ -38,43 +38,51 @@ public extension Float {
         }
     }
 
-    /// A utility public function that formats a numeric value as a currency string with an optional inclusion of cents.
+    /// A utility public function that formats a numeric value as a currency string with optional inclusion of cents and grouping separators.
     ///
-    /// - Parameter includeCents: A boolean value indicating whether or not to include cents in the formatted string. Default value is true.
+    /// - Parameters:
+    ///   - includeCents: A boolean value indicating whether or not to include cents in the formatted string. Default value is true.
+    ///   - trimZeroCents: A boolean value indicating whether or not to trim ".00" from the formatted string when cents are zero. Default value is true.
+    ///   - useCommas: A boolean value indicating whether or not to include commas as grouping separators in the formatted string. Default value is true.
     ///
     /// - Returns: A String representation of the numeric value formatted as currency.
     ///
-    /// This function formats a numeric value as a currency string using the NumberFormatter class. The locale property of the formatter is set to the current locale, and the numberStyle property is set to .currency.
-
-    /// If includeCents is true, the formatted string includes cents, and if it is false, the cents are removed from the formatted string.
-
-    /// The formatted string is then cleaned up and returned by the cleanDollarAmount function, which removes any leading or trailing dollar signs and formats any .00 cents amounts as whole dollar amounts. The cleaned string is then returned as the result of this function.
-
-    /// If the numeric value cannot be formatted using the NumberFormatter class, this function returns the original value as a string.
-    func money(includeCents: Bool = true) -> String {
+    /// This function formats a numeric value as a currency string using the `NumberFormatter` class. The locale property of the formatter is set to the current locale, and the numberStyle property is set to `.currency`.
+    ///
+    /// If `includeCents` is true, the formatted string includes cents; otherwise, the cents are removed from the formatted string.
+    ///
+    /// The formatted string is then cleaned up and returned by the `cleanDollarAmount` function, which removes any leading or trailing dollar signs and formats any ".00" amounts as whole dollar amounts, depending on the `trimZeroCents` parameter. The cleaned string is then returned as the result of this function.
+    ///
+    /// If the numeric value cannot be formatted using the `NumberFormatter` class, this function returns the original value as a string.
+    func money(includeCents: Bool = true, trimZeroCents: Bool = true, useCommas: Bool = true) -> String {
         func cleanDollarAmount(amount: String) -> String {
-            let dollarAmount = amount.trimmingCharacters(in: ["$"])
+            var dollarAmount = amount.replacingOccurrences(of: "$", with: "")
+            let isNegative = dollarAmount.hasPrefix("-")
+            if isNegative {
+                dollarAmount = dollarAmount.replacingOccurrences(of: "-", with: "")
+            }
+
             if dollarAmount.isEmpty {
                 return "$0"
-            } else if dollarAmount.hasSuffix(".00") {
-                return "$" + dollarAmount.replacingOccurrences(of: ".00", with: "")
+            } else if dollarAmount.hasSuffix(".00"), trimZeroCents {
+                return (isNegative ? "-$" : "$") + dollarAmount.replacingOccurrences(of: ".00", with: "")
             } else {
-                return "$" + dollarAmount
+                return (isNegative ? "-$" : "$") + dollarAmount
             }
         }
 
         let formatter = NumberFormatter()
         formatter.locale = Locale.current
         formatter.numberStyle = .currency
+        formatter.usesGroupingSeparator = useCommas
 
         if let formattedValue = formatter.string(from: self as NSNumber) {
-            let retVal = includeCents ? formattedValue : formattedValue.removeAllAfter(".")
+            let retVal = includeCents ? formattedValue : formattedValue.components(separatedBy: ".").first ?? formattedValue
             return cleanDollarAmount(amount: retVal).replacingOccurrences(of: "¤", with: "")
         }
 
         return "\(self)"
     }
-
     /// A utility function that formats a numeric value as a currency string with an extended precision, up to 11 decimal places.
     ///
     /// - Parameter decimalPlaces: An optional integer value indicating the number of decimal places to include in the formatted string. The default value is 4.
