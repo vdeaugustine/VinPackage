@@ -118,6 +118,7 @@ public extension Double {
         formatter.locale = Locale.current
         formatter.numberStyle = .currency
         formatter.maximumFractionDigits = decimalPlaces
+        formatter.usesGroupingSeparator = true
 
         if let formattedAmount = formatter.string(from: NSNumber(value: self)) {
             let isNegative = formattedAmount.hasPrefix("-")

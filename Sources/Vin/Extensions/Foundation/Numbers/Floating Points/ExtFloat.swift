@@ -97,55 +97,23 @@ public extension Float {
 
     /// The resulting string is then returned as the result of this function.
     func moneyExtended(decimalPlaces: Int = 4) -> String {
-        guard let currencySymbol = Locale.current.currencySymbol,
-              let unicodeScalar = Unicode.Scalar(currencySymbol.unicodeScalars.first?.value ?? 36) else { return "" }
-        func cleanDollarAmount(amount: String, decimals: Int) -> String {
-            var decimalPlaces = decimals
-            let dollarAmount = amount.trimmingCharacters(in: [unicodeScalar])
-            if dollarAmount.isEmpty {
-                return "$0"
-            } else {
-                var roundedAmount = String(format: "%.\(decimalPlaces)f", Float(dollarAmount) ?? 0.0)
-                while roundedAmount.hasSuffix("0") && decimalPlaces < 11 {
-                    decimalPlaces += 1
-                    roundedAmount = String(format: "%.\(decimalPlaces)f", Float(dollarAmount) ?? 0.0)
-                }
-                func decimalSubstring(amount: String) -> String {
-                    let parts = amount.split(separator: ".")
-                    if parts.count == 2 {
-                        return String(parts[1])
-                    } else {
-                        return ""
-                    }
-                }
-                func integerSubstring(amount: String) -> String {
-                    let parts = amount.split(separator: ".")
-                    if parts.count >= 1 {
-                        return String(parts[0])
-                    } else {
-                        return ""
-                    }
-                }
-
-                var retVar: String
-
-                if roundedAmount.hasSuffix(".00") {
-                    retVar = "$" + roundedAmount.replacingOccurrences(of: ".00", with: "")
-                } else {
-                    retVar = "$" + roundedAmount
-                }
-
-                var strFollowingDecimal = decimalSubstring(amount: retVar)
-                let strBeforeDecimal = integerSubstring(amount: retVar)
-
-                while strFollowingDecimal.count > 2 && strFollowingDecimal.hasSuffix("0") {
-                    _ = strFollowingDecimal.popLast()
-                }
-
-                return strBeforeDecimal + "." + strFollowingDecimal
-            }
+        if self == 0 {
+            return money()
         }
-        return cleanDollarAmount(amount: currencySymbol + "\(self)", decimals: decimalPlaces)
+
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = decimalPlaces
+        formatter.usesGroupingSeparator = true
+
+        if let formattedAmount = formatter.string(from: NSNumber(value: self)) {
+            let isNegative = formattedAmount.hasPrefix("-")
+            let cleanAmount = formattedAmount.replacingOccurrences(of: "-", with: "").trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.").inverted)
+            return (isNegative ? "-$" : "$") + cleanAmount
+        }
+
+        return "\(self)"
     }
 
     /// A utility function that formats a numeric value as a string representing a time interval in hours and minutes.
