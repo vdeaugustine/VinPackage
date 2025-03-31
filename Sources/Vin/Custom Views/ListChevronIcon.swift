@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 16.0, *)
-struct ListChevronIcon: View {
+public struct ListChevronIcon: View {
     var font: Font? = nil
     var body: some View {
         Image(systemName: "chevron.right")

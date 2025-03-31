@@ -8,15 +8,15 @@
 import SwiftUI
 
 @available(iOS 16.0, macOS 11.0, tvOS 14.0, *)
-struct FlipView<FrontView: View, BackView: View>: View {
-    @ViewBuilder let frontView: FrontView
-    @ViewBuilder let backView: BackView
+public struct FlipView<FrontView: View, BackView: View>: View {
+    @ViewBuilder public let frontView: FrontView
+    @ViewBuilder public let backView: BackView
 
-    @Binding var showBack: Bool
+    @Binding public var showBack: Bool
     
     var animation: Animation?
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             frontView
                 .modifier(FlipOpacity(percentage: showBack ? 0 : 1))
