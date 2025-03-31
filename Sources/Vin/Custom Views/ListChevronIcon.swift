@@ -9,6 +9,9 @@ import SwiftUI
 
 @available(iOS 16.0, *)
 public struct ListChevronIcon: View {
+    public init(font: Font? = nil) {
+        self.font = font
+    }
     public var font: Font? = nil
     public var body: some View {
         Image(systemName: "chevron.right")

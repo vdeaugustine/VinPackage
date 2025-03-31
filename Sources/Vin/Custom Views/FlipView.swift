@@ -15,6 +15,13 @@ public struct FlipView<FrontView: View, BackView: View>: View {
     @Binding public var showBack: Bool
     
     var animation: Animation?
+    
+    public init(frontView: FrontView, backView: BackView, showBack: Binding<Bool>, animation: Animation? = nil) {
+        self.frontView = frontView
+        self.backView = backView
+        self._showBack = showBack
+        self.animation = animation
+    }
 
     public var body: some View {
         ZStack {
