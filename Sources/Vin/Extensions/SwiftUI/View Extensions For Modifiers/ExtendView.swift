@@ -137,4 +137,37 @@ public extension View {
     func maxWidthAndHeight() -> some View {
         frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+    
+    
+    func makeButton<Style: PrimitiveButtonStyle>(animation: Bool = false,
+                                                 includeChevron: Bool = false,
+                                                 style: Style = .plain,
+                                                 _ action: @escaping () -> Void)
+        -> some View {
+        Button {
+            if animation {
+                withAnimation {
+                    action()
+                }
+            } else {
+                action()
+            }
+
+        } label: {
+            HStack {
+                self
+                    .contentShape(Rectangle())
+                if #available(iOS 16.0, *) {
+                    if includeChevron {
+                        Spacer()
+                        ListChevronIcon()
+                    }
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(style)
+    }
+    
+    
 }
