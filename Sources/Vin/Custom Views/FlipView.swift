@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
+@available(iOS 16.0, macOS 11.0, tvOS 14.0, *)
 struct FlipView<FrontView: View, BackView: View>: View {
     @ViewBuilder let frontView: FrontView
     @ViewBuilder let backView: BackView
@@ -41,7 +41,7 @@ struct FlipView<FrontView: View, BackView: View>: View {
 }
 
 // MARK: - FlipOpacity
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
+@available(iOS 16.0, macOS 11.0, tvOS 14.0, *)
 private struct FlipOpacity: AnimatableModifier {
     var percentage: CGFloat = 0
 

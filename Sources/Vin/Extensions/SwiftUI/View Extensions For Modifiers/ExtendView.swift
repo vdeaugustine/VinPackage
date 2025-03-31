@@ -137,8 +137,10 @@ public extension View {
     func maxWidthAndHeight() -> some View {
         frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+}
 
-    @available(iOS 16.0, *)
+@available(iOS 16.0, *)
+public extension View {
     func makeButton<Style: PrimitiveButtonStyle>(animation: Bool = false,
                                                  includeChevron: Bool = false,
                                                  style: Style = .plain,
