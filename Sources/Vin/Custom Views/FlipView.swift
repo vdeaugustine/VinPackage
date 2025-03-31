@@ -13,13 +13,16 @@ public struct FlipView<FrontView: View, BackView: View>: View {
     @ViewBuilder public let backView: BackView
 
     @Binding public var showBack: Bool
-    
+
     var animation: Animation?
-    
-    public init(frontView: FrontView, backView: BackView, showBack: Binding<Bool>, animation: Animation? = nil) {
-        self.frontView = frontView
-        self.backView = backView
-        self._showBack = showBack
+
+    public init(@ViewBuilder frontView: () -> FrontView,
+                @ViewBuilder backView: () -> BackView,
+                showBack: Binding<Bool>,
+                animation: Animation? = nil) {
+        self.frontView = frontView()
+        self.backView = backView()
+        _showBack = showBack
         self.animation = animation
     }
 
@@ -48,6 +51,7 @@ public struct FlipView<FrontView: View, BackView: View>: View {
 }
 
 // MARK: - FlipOpacity
+
 @available(iOS 16.0, macOS 11.0, tvOS 14.0, *)
 private struct FlipOpacity: AnimatableModifier {
     var percentage: CGFloat = 0
